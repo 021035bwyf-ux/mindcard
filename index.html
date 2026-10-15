@@ -310,10 +310,20 @@
     let index = 0;
     let current = order[0];
 
+    // 멘트마다(= 카드마다) 색이 함께 바뀌도록, id 기준으로 고정된 색을 순환 배정
+    const CARD_COLORS = ['', 'lp-c-sage', 'lp-c-blue', 'lp-c-plum', 'lp-c-amber', 'lp-c-rose'];
+    function colorFor(quote) {
+      const n = parseInt(quote.id.replace('q', ''), 10) || 0;
+      return CARD_COLORS[n % CARD_COLORS.length];
+    }
+
     function render() {
       cardTag.textContent = `#${current.tag}`;
       cardText.textContent = current.text;
       cardDate.textContent = current.id.replace('q', '');
+      heartCard.classList.remove(...CARD_COLORS.filter(Boolean));
+      const color = colorFor(current);
+      if (color) heartCard.classList.add(color);
       heartCard.style.animation = 'none';
       void heartCard.offsetWidth;
       heartCard.style.animation = '';

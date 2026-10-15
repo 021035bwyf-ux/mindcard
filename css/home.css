@@ -156,7 +156,14 @@ button:focus-visible, a:focus-visible {
   color: #fffaf3; background: #cb765a;
   box-shadow: 0 25px 50px rgba(77, 67, 55, 0.2);
   animation: lp-card-arrive 450ms cubic-bezier(.2,.9,.3,1);
+  transition: background 250ms ease;
 }
+/* 카드를 뽑을 때마다(= 다른 멘트) 색도 함께 바뀌도록 순환하는 팔레트 */
+.lp-heart-card.lp-c-sage { background: #6e8c7d; }
+.lp-heart-card.lp-c-blue { background: #687e8c; }
+.lp-heart-card.lp-c-plum { background: #8a7093; }
+.lp-heart-card.lp-c-amber { background: #b8905a; }
+.lp-heart-card.lp-c-rose { background: #ab7068; }
 @keyframes lp-card-arrive {
   from { opacity: 0; transform: translateY(10px) rotate(2deg); }
   to { opacity: 1; transform: translateY(0) rotate(0); }
