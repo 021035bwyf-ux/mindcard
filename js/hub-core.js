@@ -91,6 +91,8 @@ const Quote = {
     try { localStorage.setItem('mc_liked_' + this.likeKey(id), '1'); } catch (e) {}
     Hub.log('quote_like', null, this.likeKey(id));
   },
+  // 날짜와 무관하게 전체 멘트 목록을 순회하고 싶을 때(예: 메인 히어로의 "다른 카드 보기") 사용
+  all() { return QUOTES.slice(); },
   // 실제 클릭 수만 보여줌(꾸며낸 숫자 없음) — hub_events에 개인정보가 없어 익명 조회가 이미 허용되어 있음
   async likeCount(id) {
     const key = this.likeKey(id);
@@ -463,8 +465,8 @@ Hub.renderFooter = function () {
   if (document.body.hasAttribute('data-no-footer') || document.querySelector('.center-footer')) return;
   const style = document.createElement('style');
   style.textContent = `
-    .center-footer { max-width: 560px; margin: 28px auto 24px; padding: 20px 16px 18px; background: #fff; border-radius: 18px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,.08); box-sizing: border-box; width: calc(100% - 32px); }
-    .center-logo { display: block; width: 100%; max-width: 420px; height: auto; margin: 0 auto; }
+    .center-footer { max-width: 420px; margin: 28px auto 24px; text-align: center; box-sizing: border-box; width: calc(100% - 32px); }
+    .center-logo { display: block; width: 100%; max-width: 420px; height: auto; margin: 0 auto; mix-blend-mode: multiply; }
   `;
   document.head.appendChild(style);
   const footer = document.createElement('footer');
