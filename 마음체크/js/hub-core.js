@@ -461,3 +461,8 @@ document.addEventListener('DOMContentLoaded', () => {
   Hub.wireLinks();
   Hub.renderFooter();
 });
+
+// 브라우저에서는 무시되고(module이 없음), Node 테스트 실행기에서만 Hub를 내보냄
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { Hub, dayIndex, isoWeekKey, todayStr, daysAgo };
+}
