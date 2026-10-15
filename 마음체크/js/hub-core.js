@@ -266,7 +266,26 @@ const Hub = {
   // anon 키만으로는 applications 테이블을 조회할 수 없고, 실제 로그인(JWT)이 있어야만 조회 가능 (RLS 정책 참고)
   Admin: {
     TOKEN_KEY: 'mc_admin_token',
-    async login(email, password) {
+    // JWT는 서명 검증 없이 payload만 읽음 — 화면 표시/분기용이고, 실제 권한 검사는
+    // 서버(Supabase RLS의 is_admin())가 매 요청마다 다시 하므로 클라이언트에서 값을 믿고 신뢰하지 않음
+    decodeToken(token) {
+      try {
+        const payload = token.split('.')[1];
+        const json = decodeURIComponent(atob(payload.replace(/-/g, '+').replace(/_/g, '/'))
+          .split('').map(c => '%' + c.charCodeAt(0).toString(16).padStart(2, '0')).join(''));
+        return JSON.parse(json);
+      } catch (e) { return null; }
+    },
+    getRole() {
+      const token = this.getToken();
+      if (!token) return null;
+      const payload = this.decodeToken(token);
+      return payload && payload.app_metadata && payload.app_metadata.role || null;
+    },
+    isAdmin() { return this.getRole() === 'admin'; },
+    // role=admin이 아니면 로그인 자체를 막음(automation_settings 등 admin 전용 화면에서 사용)
+    async login(email, password, opts) {
+      opts = opts || {};
       const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY },
@@ -282,6 +301,10 @@ const Hub = {
         throw new Error(KNOWN[raw] || raw || '로그인에 실패했어요');
       }
       sessionStorage.setItem(this.TOKEN_KEY, data.access_token);
+      if (opts.requireAdmin && !this.isAdmin()) {
+        this.logout();
+        throw new Error('관리자 권한이 없는 계정이에요.');
+      }
       return data.access_token;
     },
     getToken() {
@@ -314,6 +337,76 @@ const Hub = {
         body: JSON.stringify({ status })
       });
       if (!res.ok) throw new Error('상태 변경에 실패했어요 (' + res.status + ')');
+    },
+    getEmail() {
+      const token = this.getToken();
+      if (!token) return null;
+      const payload = this.decodeToken(token);
+      return (payload && payload.email) || null;
+    }
+  },
+
+  // ===== 운영 자동화 (automation_settings / automation_tasks / activity_logs) =====
+  // 전부 role=admin 로그인(Hub.Admin) 필요 — RLS가 서버에서 다시 한 번 강제함
+  Automation: {
+    _authHeaders() {
+      const token = Hub.Admin.getToken();
+      if (!token) throw new Error('로그인이 필요해요');
+      return { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` };
+    },
+    async fetchSettings() {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/automation_settings?order=id.asc`, {
+        headers: this._authHeaders()
+      });
+      if (!res.ok) throw new Error('자동화 설정을 불러오지 못했어요 (' + res.status + ')');
+      return await res.json();
+    },
+    // patch 예: { enabled: false } 또는 { permission_level: 'draft' }
+    async updateSetting(id, area, patch) {
+      const headers = this._authHeaders();
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/automation_settings?id=eq.${id}`, {
+        method: 'PATCH',
+        headers: { ...headers, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ ...patch, updated_at: new Date().toISOString() })
+      });
+      if (!res.ok) throw new Error('설정 변경에 실패했어요 (' + res.status + ')');
+      await this.logActivity('admin', Hub.Admin.getEmail(), '설정 변경', area, JSON.stringify(patch));
+    },
+    async fetchTasks(status) {
+      const q = status ? `&status=eq.${encodeURIComponent(status)}` : '';
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/automation_tasks?order=created_at.desc&limit=200${q}`, {
+        headers: this._authHeaders()
+      });
+      if (!res.ok) throw new Error('작업 목록을 불러오지 못했어요 (' + res.status + ')');
+      return await res.json();
+    },
+    // decision: 'approved' | 'rejected' | 'done'
+    async decideTask(id, decision) {
+      const headers = this._authHeaders();
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/automation_tasks?id=eq.${id}`, {
+        method: 'PATCH',
+        headers: { ...headers, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ status: decision, decided_at: new Date().toISOString(), decided_by: Hub.Admin.getEmail() })
+      });
+      if (!res.ok) throw new Error('작업 처리에 실패했어요 (' + res.status + ')');
+      await this.logActivity('admin', Hub.Admin.getEmail(), '작업 ' + decision, 'task#' + id, null);
+    },
+    async fetchLogs(limit) {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/activity_logs?order=created_at.desc&limit=${limit || 100}`, {
+        headers: this._authHeaders()
+      });
+      if (!res.ok) throw new Error('활동 기록을 불러오지 못했어요 (' + res.status + ')');
+      return await res.json();
+    },
+    async logActivity(actorType, actor, action, target, detail) {
+      try {
+        const headers = this._authHeaders();
+        await fetch(`${SUPABASE_URL}/rest/v1/activity_logs`, {
+          method: 'POST',
+          headers: { ...headers, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+          body: JSON.stringify({ actor_type: actorType, actor, action, target, detail })
+        });
+      } catch (e) { /* 로그 실패가 본 작업을 막지 않음 */ }
     }
   },
 

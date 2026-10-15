@@ -12,7 +12,8 @@
 - `my.html` — 마이 페이지. 전체 기록 리스트, 총 기록일·연속 기록일 통계, 최근 기록 중 힘든 기분이 많으면 지역연결로 부드럽게 넛지. 기록 데이터 기반으로 `none/light/candidate/sustained` 4단계 참여 상태를 내부적으로만 구분(사용자에게 등급·점수로 노출하지 않음) — `js/hub-core.js`의 `Hub.Records.classify()` 참고
 - `location.html` — 지역연결 페이지. 청(소)년 외로움 마음돌봄 프로젝트 4개 거점(원미/소사/오정/학교밖청소년지원센터) 안내 + 지도 링크, 기존 연계 프로그램(고요의 실/또래상담/청소년안전망/고위기청소년 클리닉) 소개, 센터 연결 CTA, "마음연결 신청하기" 버튼. 거점 데이터는 `js/hub-core.js`의 `Hub.LOCATIONS`에서 관리
 - `apply.html` — 마음연결 신청 폼. 신청 종류(마음연결 패스/코디네이터 지원/보호자 자조모임), 본인·보호자 대리 구분, 이름·출생연도·연락처, 만 14세 미만이면 보호자 이름·연락처 자동 요구, 희망 센터, 하고 싶은 말(선택), 개인정보 수집·이용 동의(필수)를 받아 `applications` 테이블에 저장. 제출은 `Hub.submitApplication()`
-- `applications-admin.html` — 신청 관리자 페이지. **Supabase Auth 이메일/비밀번호 로그인이 있어야만** 신청 목록을 볼 수 있음(익명 키로는 조회 불가, `supabase_applications_setup.sql`의 RLS 정책 참고). 신청 건별로 신규/연락완료/처리완료 상태 변경 가능
+- `applications-admin.html` — 신청 관리자 페이지. **Supabase Auth 이메일/비밀번호 로그인이 있어야만** 신청 목록을 볼 수 있음(익명 키로는 조회 불가, `supabase_applications_setup.sql`의 RLS 정책 참고). 신청 건별로 신규/연락완료/처리완료 상태 변경 가능. role 제한은 없음(코디네이터/센터 담당자 등 로그인 가능한 모든 계정 사용 가능)
+- `admin-automation.html`, `admin-automation-inbox.html` — **운영 자동화 관리자 페이지**. 아래 "운영 자동화 시스템" 참고
 - `tarot/` — 기존 "고민타파 타로 상담프로그램" 이식본
 - `tests/love.html` — 연애 스타일 유형테스트 (8문항, 4가지 유형 + 찰떡궁합 결과, MBTI 테스트 형식)
 - `tests/loneliness.html`, `tests/stress.html`, `tests/mood.html`, `tests/esteem.html`, `tests/burnout.html`, `tests/jobburnout.html` — 10문항 간이 자가검사 (점수/게이지형 결과). 각각 외로움(LSIS·UCLA 개념 참고), 스트레스(PSS 개념 참고), 마음날씨(PHQ-9 개념 참고), 자존감(로젠버그 자존감 척도 개념 참고), 무기력(일반적 에너지 소진), 번아웃(MBI 소진 척도 개념 참고, 학업·알바·취준 맥락)을 다루며, 모두 원척도를 그대로 쓰지 않고 자체 제작한 문항입니다.
@@ -23,6 +24,28 @@
 - `css/hub.css` — 커버카드 갤러리, 인트로 체크리스트, 결과 카드(게이지·유형), 신청 폼 등 디자인 시스템
 - `supabase_setup.sql` — 통계용 `hub_events` 테이블 생성 SQL (최초 1회, Supabase SQL Editor에서 실행)
 - `supabase_applications_setup.sql` — 신청 접수용 `applications` 테이블 + 보안 정책(RLS) 생성 SQL. **신청 폼을 쓰려면 이 SQL도 꼭 실행해야 함** (아래 "신청 폼 배포 전 준비" 참고)
+- `supabase_automation_setup.sql` — 운영 자동화 시스템 테이블(`automation_settings`/`automation_tasks`/`activity_logs`) + `is_admin()` 함수 + RLS + 9개 영역 기본값 생성 SQL (완료됨)
+
+## 운영 자동화 시스템
+
+코드 관리·보안 업데이트·사용자 문의·모니터링·배포·데이터 분석·비용·정책·제품 방향, 9개 영역에 대해 "AI가 어디까지 일할지"를 관리자가 정하고, AI가 만든 작업을 승인/반려하는 체계입니다.
+
+**권한 모델**
+- Supabase Auth 로그인은 기존과 동일하게 쓰되, 계정의 `app_metadata.role`이 `admin`인 경우에만 이 두 페이지에 들어갈 수 있습니다 (`user_metadata`가 아니라 `app_metadata`를 쓰는 이유: 로그인한 본인이 클라이언트에서 바꿀 수 없어서 권한 상승에 안전합니다).
+- role 부여는 SQL Editor에서만 가능합니다 (`update auth.users set raw_app_meta_data = raw_app_meta_data || '{"role":"admin"}'::jsonb where email = '...';`). 대시보드 UI에는 없습니다.
+- RLS가 서버에서 한 번 더 강제하므로(`is_admin()` 함수), 클라이언트 쪽 role 체크를 우회해도 데이터 자체를 못 읽습니다.
+
+**화면**
+- `admin-automation.html` — 9개 영역 카드. 켜기/끄기, AI 권한 단계(보고만/초안 작성/수정 PR 작성/자동 처리), 실행 주기, 알림 기준을 바꾸면 즉시 저장되고 `activity_logs`에 기록됩니다.
+- `admin-automation-inbox.html` — `automation_tasks`의 대기 중인 작업을 영역별로 보여주고 승인/반려. 최근 활동 기록(누가/언제/무엇을)도 같은 페이지에서 확인합니다.
+
+**아직 안 된 부분 (외부 계정·비밀값이 필요해서 보류)**
+1. **Sentry 연결** — Sentry 계정의 DSN이 있어야 `<script>`에 연결할 수 있습니다.
+2. **GitHub Actions (테스트+빌드) / main 브랜치 보호** — GitHub 저장소가 아직 원격에 push되지 않아서 먼저 저장소 연결이 필요합니다.
+3. **AI 작업 실행기** (정해진 주기로 automation_settings를 읽고, 권한 단계 안에서 GitHub 이슈/Sentry 에러를 분석해 PR을 만들거나 보고를 등록하는 스케줄러) — Anthropic API 키, GitHub 저장소·토큰, 1·2번이 먼저 끝나야 의미가 있습니다.
+4. **알림(이메일/슬랙/카카오톡)** — 각 채널의 webhook/API 키가 필요합니다.
+
+이 네 가지는 모두 "코드만으로는 끝나지 않고, 외부 서비스 계정 연결이 필요한" 단계라 사용자 확인 후 진행합니다.
 
 ## ⚠️ 공유 파일(`hub-core.js`, `hub.css`) 수정 시 주의
 모든 페이지가 `<script src="js/hub-core.js?v=7">`, `<link href="css/hub.css?v=13">`처럼 쿼리스트링으로 버전을 박아서 캐시를 관리합니다. **`hub-core.js`나 `hub.css`를 수정했다면, 전체 HTML 파일(`tarot/index.html` 포함)에서 해당 버전 숫자를 한 칸씩 올려야** 배포 후 방문자 브라우저가 새 코드를 받아갑니다. 아래처럼 한 번에 바꾸면 됩니다.
