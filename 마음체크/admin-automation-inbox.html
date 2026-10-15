@@ -28,6 +28,17 @@
   .btn-approve { color: #1D7F88; border-color: #1D7F88 !important; }
   .btn-reject { color: #D64545; border-color: #D64545 !important; }
   .empty-note { text-align: center; color: var(--text-muted); font-size: 13.5px; padding: 24px 0; }
+  .new-task-box { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 16px 18px; margin-bottom: 20px; }
+  .new-task-box summary { font-size: 13.5px; font-weight: 800; cursor: pointer; }
+  .new-task-fields { margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .new-task-fields label { font-size: 11.5px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px; }
+  .new-task-fields select, .new-task-fields input, .new-task-fields textarea {
+    width: 100%; padding: 9px 11px; border-radius: 8px; border: 1px solid var(--border); font-family: inherit; font-size: 13px; box-sizing: border-box;
+  }
+  .new-task-fields textarea { min-height: 70px; resize: vertical; }
+  .new-task-row { display: flex; gap: 10px; }
+  .new-task-row > div { flex: 1; }
+  #btnCreateTask { padding: 10px; border: none; border-radius: 10px; background: var(--primary); color: #fff; font-weight: 700; font-family: inherit; cursor: pointer; }
   .log-row { display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 12.5px; }
   .log-row:last-child { border-bottom: none; }
   .log-actor { font-weight: 800; flex: none; width: 70px; color: var(--text-secondary); }
@@ -59,6 +70,38 @@
       <a href="admin-automation-inbox.html" class="current">승인 대기함 · 활동 기록</a>
     </div>
 
+    <details class="new-task-box">
+      <summary>➕ 새 작업 등록 (점검 결과를 직접 올리기)</summary>
+      <div class="new-task-fields">
+        <div class="new-task-row">
+          <div>
+            <label>영역</label>
+            <select id="newArea"></select>
+          </div>
+          <div>
+            <label>등록자</label>
+            <select id="newActorType">
+              <option value="ai">🤖 AI 점검 결과</option>
+              <option value="admin">🙋 관리자 직접 작성</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label>제목</label>
+          <input type="text" id="newTitle" maxlength="200" placeholder="예: 신청 폼 제출 실패 오류 발견">
+        </div>
+        <div>
+          <label>내용 (선택)</label>
+          <textarea id="newContent" maxlength="2000" placeholder="점검하면서 확인한 내용을 적어주세요"></textarea>
+        </div>
+        <div>
+          <label>관련 링크 (선택)</label>
+          <input type="text" id="newLink" placeholder="https://...">
+        </div>
+        <button id="btnCreateTask">작업 등록</button>
+      </div>
+    </details>
+
     <p class="section-title">🕐 대기 중인 작업 (<span id="pendingCount">0</span>)</p>
     <div id="taskList"></div>
 
@@ -69,9 +112,35 @@
   <p id="errorMsg" style="display:none;"></p>
 </div>
 
-<script src="js/hub-core.js?v=10"></script>
+<script src="js/hub-core.js?v=11"></script>
 <script>
-const AREA_BADGE = {};
+const AREAS = ['코드 관리', '보안 업데이트', '사용자 문의', '모니터링', '배포', '데이터 분석', '비용', '정책', '제품 방향'];
+document.getElementById('newArea').innerHTML = AREAS.map(a => `<option value="${a}">${a}</option>`).join('');
+
+document.getElementById('btnCreateTask').addEventListener('click', async () => {
+  const title = document.getElementById('newTitle').value.trim();
+  if (!title) { showError('제목을 입력해주세요.'); return; }
+  const btn = document.getElementById('btnCreateTask');
+  btn.disabled = true;
+  try {
+    await Hub.Automation.createTask({
+      area: document.getElementById('newArea').value,
+      actorType: document.getElementById('newActorType').value,
+      title,
+      content: document.getElementById('newContent').value.trim(),
+      relatedLink: document.getElementById('newLink').value.trim()
+    });
+    document.getElementById('newTitle').value = '';
+    document.getElementById('newContent').value = '';
+    document.getElementById('newLink').value = '';
+    loadTasks();
+    loadLogs();
+  } catch (e) {
+    showError(e.message);
+  } finally {
+    btn.disabled = false;
+  }
+});
 
 document.getElementById('btnLogin').addEventListener('click', doLogin);
 document.getElementById('btnLogout').addEventListener('click', () => { Hub.Admin.logout(); location.reload(); });

@@ -37,20 +37,27 @@
 
 **화면**
 - `admin-automation.html` — 9개 영역 카드. 켜기/끄기, AI 권한 단계(보고만/초안 작성/수정 PR 작성/자동 처리), 실행 주기, 알림 기준을 바꾸면 즉시 저장되고 `activity_logs`에 기록됩니다.
-- `admin-automation-inbox.html` — `automation_tasks`의 대기 중인 작업을 영역별로 보여주고 승인/반려. 최근 활동 기록(누가/언제/무엇을)도 같은 페이지에서 확인합니다.
+- `admin-automation-inbox.html` — `automation_tasks`의 대기 중인 작업을 영역별로 보여주고 승인/반려. **"➕ 새 작업 등록"**에서 점검 결과를 직접 올릴 수 있음(아래 "운영 방식" 참고). 최근 활동 기록(누가/언제/무엇을)도 같은 페이지에서 확인합니다.
 
-**아직 안 된 부분 (외부 계정·비밀값이 필요해서 보류)**
-1. **Sentry 연결** — Sentry 계정의 DSN이 있어야 `<script>`에 연결할 수 있습니다.
-2. **GitHub Actions (테스트+빌드) / main 브랜치 보호** — GitHub 저장소가 아직 원격에 push되지 않아서 먼저 저장소 연결이 필요합니다.
-3. **AI 작업 실행기** (정해진 주기로 automation_settings를 읽고, 권한 단계 안에서 GitHub 이슈/Sentry 에러를 분석해 PR을 만들거나 보고를 등록하는 스케줄러) — Anthropic API 키, GitHub 저장소·토큰, 1·2번이 먼저 끝나야 의미가 있습니다.
-4. **알림(이메일/슬랙/카카오톡)** — 각 채널의 webhook/API 키가 필요합니다.
+**운영 방식 — 자동 스케줄러 대신 수동 운영**
+애초 계획은 정해진 주기마다 자동으로 도는 AI 실행기(6단계)였는데, 이러려면 Anthropic API 키가 추가로 필요합니다 — Claude 구독과는 별개의 종량제 과금 상품이라(세션 안에서 대화하는 것과 "내 프로그램이 API로 Claude를 호출하는 것"은 다른 상품입니다), 지금 규모에선 득보다 비용·복잡도가 큽니다. 그래서 다음과 같이 운영합니다.
+1. 필요할 때 Claude(세션)에게 "OO 영역 점검하고 작업 등록해줘"라고 요청
+2. Claude가 점검한 뒤 `admin-automation-inbox.html`의 **새 작업 등록** 폼으로(또는 Supabase SQL로) `automation_tasks`에 `pending` 상태로 등록 — `Hub.Automation.createTask()`
+3. 관리자가 승인/반려
 
-이 네 가지는 모두 "코드만으로는 끝나지 않고, 외부 서비스 계정 연결이 필요한" 단계라 사용자 확인 후 진행합니다.
+9개 영역의 `run_interval`(실행 주기) 값은 지금은 스케줄러가 안 읽지만, **"이 영역은 얼마나 자주 사람이 점검해야 하는지"의 기준**으로는 여전히 유효합니다.
+
+**완료**: GitHub Actions(테스트+빌드), master 브랜치 보호(PR 필수 + CI 통과 필수) — 아래 README 상단 및 `.github/workflows/ci.yml` 참고.
+
+**보류 (필요해지면 그때 진행)**
+- **Sentry 연결** — 계정과 DSN 필요
+- **AI 작업 실행기(완전 자동화)** — Anthropic API 키 필요, 지금은 수동 운영으로 대체
+- **알림(Slack/카카오톡 등)** — 각 채널 webhook/API 키 필요, 지금은 관리자가 직접 inbox 페이지를 확인
 
 ## ⚠️ 공유 파일(`hub-core.js`, `hub.css`) 수정 시 주의
-모든 페이지가 `<script src="js/hub-core.js?v=7">`, `<link href="css/hub.css?v=13">`처럼 쿼리스트링으로 버전을 박아서 캐시를 관리합니다. **`hub-core.js`나 `hub.css`를 수정했다면, 전체 HTML 파일(`tarot/index.html` 포함)에서 해당 버전 숫자를 한 칸씩 올려야** 배포 후 방문자 브라우저가 새 코드를 받아갑니다. 아래처럼 한 번에 바꾸면 됩니다.
+모든 페이지가 `<script src="js/hub-core.js?v=11">`, `<link href="css/hub.css?v=13">`처럼 쿼리스트링으로 버전을 박아서 캐시를 관리합니다. **`hub-core.js`나 `hub.css`를 수정했다면, 전체 HTML 파일(`tarot/index.html` 포함)에서 해당 버전 숫자를 한 칸씩 올려야** 배포 후 방문자 브라우저가 새 코드를 받아갑니다. 아래처럼 한 번에 바꾸면 됩니다(숫자는 현재 버전+1로 바꿔서 실행).
 ```
-grep -rl 'hub-core.js?v=7' --include='*.html' . | xargs sed -i 's/hub-core.js?v=7/hub-core.js?v=8/g'
+grep -rl 'hub-core.js?v=11' --include='*.html' . | xargs sed -i 's/hub-core.js?v=11/hub-core.js?v=12/g'
 grep -rl 'hub.css?v=13' --include='*.html' . | xargs sed -i 's/hub.css?v=13/hub.css?v=14/g'
 ```
 
