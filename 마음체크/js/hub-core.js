@@ -380,6 +380,25 @@ const Hub = {
       if (!res.ok) throw new Error('작업 목록을 불러오지 못했어요 (' + res.status + ')');
       return await res.json();
     },
+    // 수동 운영 모드: 스케줄러 없이, 사람이 점검을 요청했을 때(세션 안에서 AI가 직접, 또는 관리자가 직접) 작업을 등록
+    // actorType: 'ai'(세션에서 점검한 결과를 등록) | 'admin'(관리자가 직접 작성)
+    async createTask({ area, title, content, relatedLink, actorType }) {
+      const headers = this._authHeaders();
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/automation_tasks`, {
+        method: 'POST',
+        headers: { ...headers, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+        body: JSON.stringify({
+          area, title,
+          content: content || null,
+          related_link: relatedLink || null,
+          status: 'pending'
+        })
+      });
+      if (!res.ok) throw new Error('작업 등록에 실패했어요 (' + res.status + ')');
+      const [task] = await res.json();
+      await this.logActivity(actorType || 'admin', Hub.Admin.getEmail(), '작업 등록', area, title);
+      return task;
+    },
     // decision: 'approved' | 'rejected' | 'done'
     async decideTask(id, decision) {
       const headers = this._authHeaders();
