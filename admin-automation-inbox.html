@@ -68,6 +68,8 @@
     <div class="nav-row">
       <a href="admin-automation.html">설정</a>
       <a href="admin-automation-inbox.html" class="current">승인 대기함 · 활동 기록</a>
+      <a href="applications-admin.html">신청 관리</a>
+      <a href="stats.html">유입 통계</a>
     </div>
 
     <details class="new-task-box">
@@ -112,7 +114,7 @@
   <p id="errorMsg" style="display:none;"></p>
 </div>
 
-<script src="js/hub-core.js?v=11"></script>
+<script src="js/hub-core.js?v=14"></script>
 <script>
 const AREAS = ['코드 관리', '보안 업데이트', '사용자 문의', '모니터링', '배포', '데이터 분석', '비용', '정책', '제품 방향'];
 document.getElementById('newArea').innerHTML = AREAS.map(a => `<option value="${a}">${a}</option>`).join('');

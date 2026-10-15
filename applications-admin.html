@@ -12,6 +12,9 @@
   #login-box button { width: 100%; margin-top: 12px; padding: 12px; border: none; border-radius: 10px; background: var(--primary); color: #fff; font-weight: 700; cursor: pointer; }
   #login-box p.hint { font-size: 12px; color: var(--text-muted); margin-top: 14px; line-height: 1.6; }
   .top-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .nav-row { display: flex; gap: 8px; margin: 14px 0 20px; flex-wrap: wrap; }
+  .nav-row a { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--border); background: #fff; font-size: 12.5px; font-weight: 700; color: var(--text-secondary); text-decoration: none; }
+  .nav-row a.current { background: var(--primary); color: #fff; border-color: var(--primary); }
   .filter-row { display: flex; gap: 6px; margin: 16px 0; flex-wrap: wrap; }
   .filter-row button { padding: 7px 14px; border-radius: 999px; border: 1px solid var(--border); background: #fff; font-family: inherit; font-size: 12.5px; font-weight: 700; color: var(--text-secondary); cursor: pointer; }
   .filter-row button.selected { background: var(--primary); color: #fff; border-color: var(--primary); }
@@ -48,6 +51,12 @@
         <button id="btnLogout" style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-family:inherit;font-size:12.5px;cursor:pointer;">로그아웃</button>
       </div>
     </header>
+    <div class="nav-row">
+      <a href="admin-automation.html">설정</a>
+      <a href="admin-automation-inbox.html">승인 대기함 · 활동 기록</a>
+      <a href="applications-admin.html" class="current">신청 관리</a>
+      <a href="stats.html">유입 통계</a>
+    </div>
     <div class="filter-row" id="filterRow"></div>
     <div id="list"></div>
   </div>
@@ -55,7 +64,7 @@
   <p id="errorMsg" style="display:none;"></p>
 </div>
 
-<script src="js/hub-core.js?v=11"></script>
+<script src="js/hub-core.js?v=14"></script>
 <script>
 const STATUS_LABEL = { new: '신규', contacted: '연락완료', done: '처리완료' };
 let allApps = [];

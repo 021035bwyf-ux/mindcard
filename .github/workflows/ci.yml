@@ -12,9 +12,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: 마음체크
     steps:
       - uses: actions/checkout@v4
 
