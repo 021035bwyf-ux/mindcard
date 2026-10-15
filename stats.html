@@ -18,6 +18,9 @@
   #login-box input { width: 100%; padding: 12px; margin-top: 10px; border-radius: 10px; border: 1px solid var(--border); font-size: 15px; }
   #login-box button { width: 100%; margin-top: 12px; padding: 12px; border: none; border-radius: 10px; background: var(--primary); color: #fff; font-weight: 700; cursor: pointer; }
   select { padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border); font-family: inherit; }
+  .nav-row { display: flex; gap: 8px; margin: 14px 0 20px; flex-wrap: wrap; }
+  .nav-row a { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--border); background: #fff; font-size: 12.5px; font-weight: 700; color: var(--text-secondary); text-decoration: none; }
+  .nav-row a.current { background: var(--primary); color: #fff; border-color: var(--primary); }
 </style>
 </head>
 <body data-no-footer>
@@ -38,6 +41,13 @@
       </select></p>
     </header>
 
+    <div class="nav-row">
+      <a href="admin-automation.html">설정</a>
+      <a href="admin-automation-inbox.html">승인 대기함 · 활동 기록</a>
+      <a href="applications-admin.html">신청 관리</a>
+      <a href="stats.html" class="current">유입 통계</a>
+    </div>
+
     <div class="stat-cards" id="summaryCards"></div>
 
     <h3>유입경로(src)별 현황</h3>
@@ -48,7 +58,7 @@
   </div>
 </div>
 
-<script src="js/hub-core.js?v=13"></script>
+<script src="js/hub-core.js?v=14"></script>
 <script>
 function tryLogin() {
   const pw = document.getElementById('pw').value;

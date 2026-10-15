@@ -467,12 +467,15 @@ Hub.renderFooter = function () {
   style.textContent = `
     .center-footer { max-width: 420px; margin: 28px auto 24px; text-align: center; box-sizing: border-box; width: calc(100% - 32px); }
     .center-logo { display: block; width: 100%; max-width: 420px; height: auto; margin: 0 auto; mix-blend-mode: multiply; }
+    .center-footer-admin-link { display: inline-block; margin-top: 10px; color: #b9b2a6; font-size: 10.5px; text-decoration: none; opacity: .7; }
+    .center-footer-admin-link:hover { opacity: 1; text-decoration: underline; }
   `;
   document.head.appendChild(style);
   const footer = document.createElement('footer');
   footer.className = 'center-footer';
   footer.innerHTML = `
     <img class="center-logo" src="${HUB_BASE}images/center-logo.jpg" alt="부천시청소년상담복지센터 · 부천시청소년지원센터 꿈드림">
+    <a class="center-footer-admin-link" href="${HUB_BASE}admin-automation.html">관리자</a>
   `;
   document.body.appendChild(footer);
 };
