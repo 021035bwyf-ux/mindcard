@@ -3,292 +3,162 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>마음카드 - 나를 알아가는 3분</title>
+<title>마음서랍 - 나를 알아가는 3분</title>
 <meta name="description" content="타로, 연애성향, 외로움·스트레스·마음날씨·자존감·무기력·번아웃까지. 3분이면 되는 자가검사로 오늘의 나를 가볍게 들여다봐요.">
-<link rel="stylesheet" href="css/home.css?v=1">
+<link rel="stylesheet" href="css/home.css?v=8">
+<link rel="stylesheet" href="css/redesign.css?v=4">
 </head>
 <body>
-<div class="lp-shell">
-  <header class="lp-header">
-    <a class="lp-brand" href="#top" aria-label="마음카드 홈">
-      <span class="lp-brand-mark">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>
-      </span>
-      <span>마음카드</span>
-    </a>
-    <button class="lp-menu-button" id="menuBtn" aria-label="메뉴 열기" aria-expanded="false">
-      <span></span><span></span>
-    </button>
-    <nav class="lp-nav" id="mainNav" aria-label="주요 메뉴">
-      <a href="#contents">마음콘텐츠</a>
-      <a href="my.html" id="navMy">마이</a>
-      <a href="location.html">가까운 거점</a>
-      <a class="lp-nav-cta" href="apply.html">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 10h.01M12 10h.01M16 10h.01"/></svg>
-        마음연결 신청하기
+<div class="sd-shell">
+  <header class="sd-topbar">
+    <div class="sd-topbar-inner">
+      <a class="sd-brand" href="#" data-tab-target="card">
+        <span class="sd-brand-mark">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>
+        </span>
+        마음서랍
       </a>
-    </nav>
+      <nav class="sd-tabs" aria-label="마음서랍 카테고리">
+        <button class="sd-tab active" data-tab-target="card" type="button"><span class="sd-tab-icon">🃏</span><span class="sd-tab-label">마음카드</span></button>
+        <button class="sd-tab" data-tab-target="diary" type="button"><span class="sd-tab-icon">📔</span><span class="sd-tab-label">마음일기</span></button>
+        <button class="sd-tab" data-tab-target="check" type="button"><span class="sd-tab-icon">✅</span><span class="sd-tab-label">마음체크</span></button>
+        <button class="sd-tab" data-tab-target="connect" type="button"><span class="sd-tab-icon">🤝</span><span class="sd-tab-label">마음연결</span></button>
+      </nav>
+      <a class="sd-topbar-cta" data-hub-link="apply.html">마음연결 신청</a>
+    </div>
   </header>
 
   <main>
-    <section class="lp-hero" id="top">
-      <div class="lp-hero-copy">
-        <div class="lp-eyebrow"><span></span><span id="heroEyebrow">마음과 마음 사이, 작은 연결</span></div>
-        <h1>
-          혼자라고 느끼는 날,<br>
-          <em>여기서 잠시 쉬어가요</em>
-        </h1>
-        <p id="heroSub">
-          답을 찾지 않아도 괜찮아요.<br>
-          마음카드 한 장부터 천천히 시작해 보세요.
-        </p>
-        <button class="lp-primary-btn" id="drawBtn" type="button">
-          오늘의 마음카드 뽑기
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-        </button>
-        <span class="lp-helper-text" id="recordHelper">로그인 없이, 익명으로 이용할 수 있어요</span>
-      </div>
+    <!-- ===== 마음카드 ===== -->
+    <section class="sd-panel active" data-tab-panel="card">
+      <div class="sd-card-tab">
+        <div class="sd-panel-eyebrow"><span>🗂️</span><span>서랍 1 · 마음카드</span></div>
+        <h1 style="font-family:'Gowun Batang',serif; font-size:clamp(26px,3.4vw,36px); margin:0 0 10px; color:#294039;">오늘, 마음카드 한 장</h1>
+        <p style="color:#707974; font-size:14.5px; margin:0 0 32px; max-width:420px;">서랍을 열듯 가볍게 뽑아보세요. 정답은 없어요.</p>
 
-      <div class="lp-card-stage" aria-live="polite">
-        <div class="lp-orbit lp-orbit-one"></div>
-        <div class="lp-orbit lp-orbit-two"></div>
-        <div class="lp-card-back lp-back-one"></div>
-        <div class="lp-card-back lp-back-two"></div>
-        <article class="lp-heart-card" id="heartCard">
-          <div class="lp-heart-card-top">
-            <span>오늘의 한마디 · <span id="cardTag">#쉼</span></span>
-            <span class="lp-card-tagnum" id="cardDate">00</span>
+        <div class="sd-card-stage" aria-live="polite">
+          <div class="lp-orbit lp-orbit-one"></div>
+          <div class="lp-orbit lp-orbit-two"></div>
+          <div class="lp-card-back lp-back-one"></div>
+          <div class="lp-card-back lp-back-two"></div>
+
+          <div class="sd-flip-card" id="flipCard">
+            <div class="sd-flip-inner" id="flipInner">
+              <!-- 닫힌 면: 뽑기 전 -->
+              <button type="button" class="sd-flip-face sd-flip-closed" id="drawBtn">
+                <span class="sd-flip-closed-icon">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>
+                </span>
+                <span class="sd-flip-closed-text">탭해서<br>오늘의 마음카드를<br>뽑아보세요</span>
+              </button>
+              <!-- 열린 면: 뽑은 뒤 -->
+              <article class="lp-heart-card sd-flip-face sd-flip-open" id="heartCard">
+                <div class="lp-heart-card-top">
+                  <span>오늘의 한마디 · <span id="cardTag">#쉼</span></span>
+                  <span class="lp-card-tagnum" id="cardDate">00</span>
+                </div>
+                <div class="lp-card-art">
+                  <span class="lp-art-circle lp-art-circle-one"></span>
+                  <span class="lp-art-circle lp-art-circle-two"></span>
+                  <span class="lp-art-heart">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>
+                  </span>
+                  <span class="lp-art-spark">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 1.3 4.2a5 5 0 0 0 3.4 3.4L21 12l-4.3 1.4a5 5 0 0 0-3.4 3.4L12 21l-1.3-4.2a5 5 0 0 0-3.4-3.4L3 12l4.3-1.4a5 5 0 0 0 3.4-3.4Z"/></svg>
+                  </span>
+                </div>
+                <p id="cardText">오늘 아무것도 안 해도 괜찮아요.</p>
+                <div class="lp-card-actions">
+                  <button type="button" id="likeBtn" class="lp-like-btn">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>
+                    공감해요 <span id="likeCount">0</span>
+                  </button>
+                  <button type="button" id="nextCardBtn">
+                    다른 카드 보기
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                  </button>
+                </div>
+              </article>
+            </div>
           </div>
-          <div class="lp-card-art">
-            <span class="lp-art-circle lp-art-circle-one"></span>
-            <span class="lp-art-circle lp-art-circle-two"></span>
-            <span class="lp-art-heart">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>
-            </span>
-            <span class="lp-art-spark">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 1.3 4.2a5 5 0 0 0 3.4 3.4L21 12l-4.3 1.4a5 5 0 0 0-3.4 3.4L12 21l-1.3-4.2a5 5 0 0 0-3.4-3.4L3 12l4.3-1.4a5 5 0 0 0 3.4-3.4Z"/></svg>
-            </span>
-          </div>
-          <p id="cardText">오늘 아무것도 안 해도 괜찮아요.</p>
-          <div class="lp-card-actions">
-            <button type="button" id="likeBtn" class="lp-like-btn">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>
-              공감해요 <span id="likeCount">0</span>
-            </button>
-            <button type="button" id="nextCardBtn">
-              다른 카드 보기
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-            </button>
-          </div>
-        </article>
-        <div class="lp-card-note lp-note-one">오늘도<br>잘 왔어요</div>
-        <div class="lp-card-note lp-note-two">천천히,<br>괜찮아요</div>
+        </div>
       </div>
     </section>
 
-    <section class="lp-feeling-section" aria-labelledby="feelingTitle">
-      <div class="lp-feeling-intro">
-        <span class="lp-section-icon">
-          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 3.5C12 3 5.5 7 5.5 13.5c0 2.7 2 5 5.3 5 6.2 0 9.2-7.2 9.7-15Z"/><path d="M4 21c2-5.5 6-9.5 12-12"/></svg>
-        </span>
-        <div>
-          <p class="lp-section-kicker">지금 이 순간</p>
-          <h2 id="feelingTitle">오늘 마음은 어떤가요?</h2>
+    <!-- ===== 마음일기 ===== -->
+    <section class="sd-panel" data-tab-panel="diary">
+      <div class="sd-panel-head">
+        <div class="sd-panel-eyebrow"><span>🗂️</span><span>서랍 2 · 마음일기</span></div>
+        <h1>오늘 하루, 마음은 어땠나요?</h1>
+        <p>하나만 골라도 충분해요. 꾸준히 쌓이면 나만의 마음 날씨가 돼요.</p>
+      </div>
+
+      <div class="sd-mood-row" id="moodRow"></div>
+
+      <div class="sd-mood-note" id="moodNoteBox" style="display:none;">
+        <label for="moodNoteInput">오늘 하루, 짧게 남겨볼까요? <span>(선택)</span></label>
+        <textarea id="moodNoteInput" maxlength="140" rows="3" placeholder="무슨 일이 있었는지, 어떤 마음이었는지 편하게 적어보세요."></textarea>
+        <div class="sd-mood-note-foot">
+          <span id="moodNoteCount">0/140</span>
+          <button type="button" id="moodNoteSave">기록 저장</button>
         </div>
       </div>
-      <div class="lp-feeling-list" id="feelingList">
-        <button class="lp-feeling" data-feeling="조금 지쳐요" type="button"><span class="lp-feeling-face">···</span><span>조금 지쳐요</span></button>
-        <button class="lp-feeling" data-feeling="누군가 그리워요" type="button"><span class="lp-feeling-face">∿</span><span>누군가 그리워요</span></button>
-        <button class="lp-feeling" data-feeling="그냥 그래요" type="button"><span class="lp-feeling-face">—</span><span>그냥 그래요</span></button>
-        <button class="lp-feeling" data-feeling="괜찮은 하루예요" type="button"><span class="lp-feeling-face">⌒</span><span>괜찮은 하루예요</span></button>
+
+      <div class="sd-mood-response" id="moodResponse">아직 오늘 기록이 없어요. 기분 하나만 골라볼까요?</div>
+
+      <div class="sd-subhead">
+        <h2>최근 마음일기</h2>
+        <a href="my.html">전체 보기 →</a>
       </div>
-      <div class="lp-feeling-response" id="feelingResponse">하나를 골라도, 고르지 않아도 괜찮아요</div>
+      <div class="sd-entry-row" id="entryList"></div>
     </section>
 
-    <section class="lp-contents-section" id="contents">
-      <div class="lp-section-heading">
-        <div>
-          <p class="lp-section-kicker">마음 가까이에</p>
-          <h2>3분이면 충분한, 오늘의 마음 점검</h2>
-        </div>
+    <!-- ===== 마음체크 ===== -->
+    <section class="sd-panel" data-tab-panel="check">
+      <div class="sd-panel-head">
+        <div class="sd-panel-eyebrow"><span>🗂️</span><span>서랍 3 · 마음체크</span></div>
+        <h1>3분이면 충분한 오늘의 마음 점검</h1>
+        <p>타로부터 번아웃까지, 가볍게 시작해서 나를 조금 더 알아가요.</p>
       </div>
-      <div class="lp-content-grid">
-        <a class="lp-content-card lp-c-tarot" data-hub-link="tarot/index.html" data-test="tarot">
-          <div class="lp-content-card-top"><span class="lp-content-tag">FORTUNE</span></div>
-          <div class="lp-content-visual"><img src="images/tarot.svg" alt="" loading="lazy"></div>
-          <h3>고민타파 타로</h3>
-          <p>카드 한 장이 건네는 오늘의 힌트</p>
-          <span class="lp-card-open">열어보기
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-          </span>
-        </a>
-
-        <a class="lp-content-card lp-c-love" data-hub-link="tests/love.html" data-test="love">
-          <div class="lp-content-card-top"><span class="lp-content-tag">LOVE DNA</span><span class="lp-content-new">NEW</span></div>
-          <div class="lp-content-visual"><img src="images/love.svg" alt="" loading="lazy"></div>
-          <h3>나의 연애 스타일은?</h3>
-          <p>관계 속 진짜 내 모습 알아보기</p>
-          <span class="lp-card-open">열어보기
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-          </span>
-        </a>
-
-        <a class="lp-content-card lp-c-loneliness" data-hub-link="tests/loneliness.html" data-test="loneliness">
-          <div class="lp-content-card-top"><span class="lp-content-tag">CONNECTION</span></div>
-          <div class="lp-content-visual"><img src="images/loneliness.svg" alt="" loading="lazy"></div>
-          <h3>나 지금 외로운 거 맞아?</h3>
-          <p>내 연결감 지수 확인하기</p>
-          <span class="lp-card-open">열어보기
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-          </span>
-        </a>
-
-        <a class="lp-content-card lp-c-stress" data-hub-link="tests/stress.html" data-test="stress">
-          <div class="lp-content-card-top"><span class="lp-content-tag">PRESSURE</span></div>
-          <div class="lp-content-visual"><img src="images/stress.svg" alt="" loading="lazy"></div>
-          <h3>스트레스 게이지는 몇 %?</h3>
-          <p>요즘 나를 짓누르는 압박감 체크</p>
-          <span class="lp-card-open">열어보기
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-          </span>
-        </a>
-
-        <a class="lp-content-card lp-c-mood" data-hub-link="tests/mood.html" data-test="mood">
-          <div class="lp-content-card-top"><span class="lp-content-tag">MIND WEATHER</span></div>
-          <div class="lp-content-visual"><img src="images/mood.svg" alt="" loading="lazy"></div>
-          <h3>오늘 내 마음 날씨는?</h3>
-          <p>최근 2주, 마음 일기예보</p>
-          <span class="lp-card-open">열어보기
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-          </span>
-        </a>
-
-        <a class="lp-content-card lp-c-esteem" data-hub-link="tests/esteem.html" data-test="esteem">
-          <div class="lp-content-card-top"><span class="lp-content-tag">SELF-WORTH</span><span class="lp-content-new">NEW</span></div>
-          <div class="lp-content-visual"><img src="images/esteem.svg" alt="" loading="lazy"></div>
-          <h3>나는 나를 얼마나 아껴줄까?</h3>
-          <p>요즘 나를 대하는 방식 체크</p>
-          <span class="lp-card-open">열어보기
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-          </span>
-        </a>
-
-        <a class="lp-content-card lp-c-burnout" data-hub-link="tests/burnout.html" data-test="burnout">
-          <div class="lp-content-card-top"><span class="lp-content-tag">ENERGY</span><span class="lp-content-new">NEW</span></div>
-          <div class="lp-content-visual"><img src="images/burnout.svg" alt="" loading="lazy"></div>
-          <h3>내 마음의 배터리는 몇 %?</h3>
-          <p>무기력·방전 지수 확인하기</p>
-          <span class="lp-card-open">열어보기
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-          </span>
-        </a>
-
-        <a class="lp-content-card lp-c-jobburnout" data-hub-link="tests/jobburnout.html" data-test="jobburnout">
-          <div class="lp-content-card-top"><span class="lp-content-tag">BURNOUT</span><span class="lp-content-new">NEW</span></div>
-          <div class="lp-content-visual"><img src="images/jobburnout.svg" alt="" loading="lazy"></div>
-          <h3>나, 혹시 번아웃일까?</h3>
-          <p>공부·알바·취준으로 지친 마음 체크</p>
-          <span class="lp-card-open">열어보기
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-          </span>
-        </a>
-      </div>
+      <div class="sd-grid" id="checkGrid"></div>
     </section>
 
-    <section class="lp-center-section" id="center">
-      <div class="lp-decoration-left" aria-hidden="true">
-        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 3.5C12 3 5.5 7 5.5 13.5c0 2.7 2 5 5.3 5 6.2 0 9.2-7.2 9.7-15Z"/><path d="M4 21c2-5.5 6-9.5 12-12"/></svg>
+    <!-- ===== 마음연결 ===== -->
+    <section class="sd-panel" data-tab-panel="connect">
+      <div class="sd-panel-head">
+        <div class="sd-panel-eyebrow"><span>🗂️</span><span>서랍 4 · 마음연결</span></div>
+        <h1>마음을 나누는 데에는 준비가 필요하지 않아요</h1>
+        <p>부천시청소년상담복지센터 거점에서, 이야기를 조용히 들어줄 사람을 만나보세요.</p>
       </div>
-      <div class="lp-decoration-right" aria-hidden="true">
-        <svg width="37" height="37" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 1.3 4.2a5 5 0 0 0 3.4 3.4L21 12l-4.3 1.4a5 5 0 0 0-3.4 3.4L12 21l-1.3-4.2a5 5 0 0 0-3.4-3.4L3 12l4.3-1.4a5 5 0 0 0 3.4-3.4Z"/></svg>
+      <div class="sd-connect-cta">
+        <a class="primary" href="tel:1388">📞 청소년전화 1388</a>
+        <a class="ghost" data-hub-link="apply.html">💬 마음연결 신청하기</a>
       </div>
-      <div class="lp-center-copy">
-        <p class="lp-section-kicker">조금 더 이야기하고 싶다면</p>
-        <h2>마음을 나누는 데에는<br>준비가 필요하지 않아요</h2>
-        <p>
-          부천시청소년상담복지센터에는 이야기를 조용히 들어줄 사람이 있습니다.<br>
-          상담을 결정하지 않아도, 가까운 거점부터 가볍게 둘러보세요.
-        </p>
-        <div class="lp-center-actions">
-          <a class="lp-primary-btn" data-hub-link="location.html">
-            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 3.5C12 3 5.5 7 5.5 13.5c0 2.7 2 5 5.3 5 6.2 0 9.2-7.2 9.7-15Z"/><path d="M4 21c2-5.5 6-9.5 12-12"/></svg>
-            가까운 거점 보기
-          </a>
-          <a href="tel:1388">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.8a2 2 0 0 1-.4 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>
-            청소년전화 1388
-          </a>
-          <a data-hub-link="apply.html">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-            마음연결 신청하기
-          </a>
-        </div>
-      </div>
-      <div class="lp-center-people" aria-hidden="true">
-        <div class="lp-person lp-person-one"><span class="lp-head"></span><span class="lp-body"></span></div>
-        <div class="lp-connection-line"><span></span></div>
-        <div class="lp-person lp-person-two"><span class="lp-head"></span><span class="lp-body"></span></div>
-      </div>
+      <div class="sd-loc-grid" id="locGrid"></div>
     </section>
   </main>
-
-  <footer class="lp-footer">
-    <div class="lp-footer-brand">
-      <span class="lp-brand-mark">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>
-      </span>
-      <strong>마음카드</strong>
-      <span>당신의 마음이 혼자가 아니도록</span>
-    </div>
-    <div class="lp-footer-links">
-      <a href="apply.html">마음연결 신청</a>
-      <a href="location.html">거점 안내</a>
-      <a href="my.html">마이페이지</a>
-    </div>
-    <p>
-      모든 검사는 의학적 진단이 아닌 간이 자가 점검·재미 콘텐츠입니다.<br>
-      <b>부천시청소년상담복지센터</b>(032-325-3002) · <b>청소년전화 1388</b> — 위기 상황에서는 자살예방상담전화 109 또는 112로 연락해 주세요.
-    </p>
-  </footer>
 </div>
 
 <script src="js/hub-core.js?v=14"></script>
 <script>
   Hub.log('visit', null, 'hub_home');
 
-  document.querySelectorAll('.lp-content-card').forEach(card => {
-    card.addEventListener('click', () => Hub.log('card_click', card.getAttribute('data-test')));
-  });
-
-  // ===== 모바일 메뉴 =====
+  // ===== 탭 전환 =====
   (function () {
-    const btn = document.getElementById('menuBtn');
-    const nav = document.getElementById('mainNav');
-    btn.addEventListener('click', () => {
-      const open = nav.classList.toggle('lp-nav-open');
-      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
-    nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-      nav.classList.remove('lp-nav-open');
-      btn.setAttribute('aria-expanded', 'false');
+    const tabs = document.querySelectorAll('[data-tab-target]');
+    const panels = document.querySelectorAll('[data-tab-panel]');
+    function go(name) {
+      panels.forEach(p => p.classList.toggle('active', p.getAttribute('data-tab-panel') === name));
+      document.querySelectorAll('.sd-tab').forEach(t => t.classList.toggle('active', t.getAttribute('data-tab-target') === name));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    tabs.forEach(el => el.addEventListener('click', (e) => {
+      e.preventDefault();
+      go(el.getAttribute('data-tab-target'));
     }));
   })();
 
-  // ===== 기록 이력에 따라 안내문구만 살짝 다르게 (화면/기능은 누구에게나 동일) =====
-  try {
-    const state = Hub.Records.classify();
-    const SUBS = {
-      light: '오늘도 가볍게 들러주셨네요.<br>검사 하나, 기록 하나만 남겨도 충분해요.',
-      candidate: '요즘 꾸준히 와주고 계시네요.<br>오늘 마음은 어떤가요?',
-      sustained: '몇 주째 꾸준히 와주고 계세요.<br>오늘도 가볍게 들여다봐요.'
-    };
-    if (SUBS[state]) document.getElementById('heroSub').innerHTML = SUBS[state];
-    if (Hub.Records.getToday()) {
-      document.getElementById('recordHelper').textContent = '오늘 마음 기록을 이미 남겼어요 · 마이에서 다시 보기';
-    }
-  } catch (e) {}
-
-  // ===== 오늘의 마음카드(= 오늘의 한마디) 뽑기 =====
+  // ===== 마음카드: 뽑기(3D 플립) =====
   (function () {
     const cardTag = document.getElementById('cardTag');
     const cardDate = document.getElementById('cardDate');
@@ -296,11 +166,11 @@
     const heartCard = document.getElementById('heartCard');
     const likeBtn = document.getElementById('likeBtn');
     const likeCount = document.getElementById('likeCount');
-    const drawBtn = document.getElementById('drawBtn');
     const nextBtn = document.getElementById('nextCardBtn');
+    const drawBtn = document.getElementById('drawBtn');
+    const flipInner = document.getElementById('flipInner');
 
     const todayQuote = Hub.Quote.today();
-    // 오늘의 멘트를 맨 앞에 두고, 나머지는 섞어서 "다른 카드 보기"를 누를 때마다 순환
     const rest = Hub.Quote.all().filter(q => q.id !== todayQuote.id);
     for (let i = rest.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -309,43 +179,64 @@
     const order = [todayQuote, ...rest];
     let index = 0;
     let current = order[0];
+    let angle = 0;       // #flipInner의 누적 회전각 — 매번 180도씩만 더해서 항상 같은 방향으로 계속 돎
+    let drawn = false;   // 한 번이라도 뽑았는지
+    let spinning = false;
 
-    // 멘트마다(= 카드마다) 색이 함께 바뀌도록, id 기준으로 고정된 색을 순환 배정
     const CARD_COLORS = ['', 'lp-c-sage', 'lp-c-blue', 'lp-c-plum', 'lp-c-amber', 'lp-c-rose'];
-    function colorFor(quote) {
-      const n = parseInt(quote.id.replace('q', ''), 10) || 0;
-      return CARD_COLORS[n % CARD_COLORS.length];
+    function colorFor(q) { return CARD_COLORS[(parseInt(q.id.replace('q', ''), 10) || 0) % CARD_COLORS.length]; }
+
+    // 문장 하나 = 줄 하나가 기본(글자 크기는 모든 카드가 동일, CSS clamp로 고정).
+    // 유난히 긴 문장만 그 줄 안에서 자연스럽게 줄바꿈되도록 둠(강제로 줄이지 않음 — 카드마다 크기가 들쭉날쭉해 보이는 걸 방지)
+    function fitCardText(quote) {
+      const sentences = quote.text.split(/(?<=[.!?])\s+/).filter(Boolean);
+      cardText.innerHTML = sentences.map(s => `<span class="sd-line">${s}</span>`).join('');
     }
 
-    function render() {
-      cardTag.textContent = `#${current.tag}`;
-      cardText.textContent = current.text;
-      cardDate.textContent = current.id.replace('q', '');
+    function fillContent(quote) {
+      cardTag.textContent = `#${quote.tag}`;
+      fitCardText(quote);
+      cardDate.textContent = quote.id.replace('q', '');
       heartCard.classList.remove(...CARD_COLORS.filter(Boolean));
-      const color = colorFor(current);
-      if (color) heartCard.classList.add(color);
-      heartCard.style.animation = 'none';
-      void heartCard.offsetWidth;
-      heartCard.style.animation = '';
-
-      const liked = Hub.Quote.hasLikedToday(current.id);
+      const c = colorFor(quote);
+      if (c) heartCard.classList.add(c);
+      const liked = Hub.Quote.hasLikedToday(quote.id);
       likeBtn.classList.toggle('liked', liked);
       likeCount.textContent = '…';
-      Hub.Quote.likeCount(current.id).then(c => {
-        likeCount.textContent = String(liked ? Math.max(c, 1) : c);
-      });
+      Hub.Quote.likeCount(quote.id).then(c2 => { likeCount.textContent = String(liked ? Math.max(c2, 1) : c2); });
     }
 
-    function pickNext() {
+    function spinTo(targetAngle) {
+      spinning = true;
+      angle = targetAngle;
+      flipInner.style.transform = `rotateY(${angle}deg)`;
+    }
+
+    // 처음 뽑기: 닫힌 면 → 내용 채우고 → 180도 돌려서 공개
+    drawBtn.addEventListener('click', () => {
+      if (drawn || spinning) return;
+      drawn = true;
+      fillContent(current);
+      Hub.log('card_draw', null, current.id);
+      spinTo(180);
+    });
+
+    // 다른 카드 보기: 일단 닫힌 면까지 마저 돌고(360도) → 그 순간 새 멘트로 바꿔서 → 다시 180도 더 돌려 공개
+    nextBtn.addEventListener('click', () => {
+      if (!drawn || spinning) return;
       index = (index + 1) % order.length;
       current = order[index];
-      Hub.log('card_draw', null, current.id);
-      render();
-    }
+      const closedAngle = angle + 180; // 일단 닫힌 면이 보이는 지점까지
+      spinTo(closedAngle);
+      const onHalf = () => {
+        flipInner.removeEventListener('transitionend', onHalf);
+        fillContent(current);
+        spinTo(closedAngle + 180);
+      };
+      flipInner.addEventListener('transitionend', onHalf);
+    });
 
-    render();
-    drawBtn.addEventListener('click', pickNext);
-    nextBtn.addEventListener('click', pickNext);
+    flipInner.addEventListener('transitionend', () => { spinning = false; });
 
     likeBtn.addEventListener('click', () => {
       if (Hub.Quote.hasLikedToday(current.id)) return;
@@ -355,19 +246,111 @@
     });
   })();
 
-  // ===== 오늘 마음은 어떤가요? (가벼운 기분 체크) =====
+  // ===== 마음일기 =====
   (function () {
-    const list = document.getElementById('feelingList');
-    const response = document.getElementById('feelingResponse');
-    list.querySelectorAll('.lp-feeling').forEach(btn => {
+    const row = document.getElementById('moodRow');
+    row.innerHTML = Hub.MOODS.map(m => `<button class="sd-mood-btn" data-mood="${m.key}"><span class="sd-mood-emoji">${m.emoji}</span><span>${m.label}</span></button>`).join('');
+
+    const noteBox = document.getElementById('moodNoteBox');
+    const noteInput = document.getElementById('moodNoteInput');
+    const noteCount = document.getElementById('moodNoteCount');
+    const noteSaveBtn = document.getElementById('moodNoteSave');
+    const response = document.getElementById('moodResponse');
+    let selectedMood = null;
+
+    function openNoteBox(mood, existingNote) {
+      selectedMood = mood;
+      noteInput.value = existingNote || '';
+      noteCount.textContent = `${noteInput.value.length}/140`;
+      noteBox.style.display = 'block';
+    }
+
+    const today = Hub.Records.getToday();
+    if (today) {
+      const m = Hub.MOODS.find(x => x.key === today.mood);
+      response.innerHTML = `오늘 "${m ? m.emoji + ' ' + m.label : today.mood}"로 기록했어요. <a href="my.html">마이페이지에서 보기</a>`;
+      row.querySelectorAll('.sd-mood-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-mood') === today.mood));
+      openNoteBox(today.mood, today.note);
+    }
+
+    row.querySelectorAll('.sd-mood-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        list.querySelectorAll('.lp-feeling').forEach(b => b.classList.remove('active'));
+        const mood = btn.getAttribute('data-mood');
+        row.querySelectorAll('.sd-mood-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        const label = btn.getAttribute('data-feeling');
-        Hub.log('feeling_select', null, label);
-        response.innerHTML = `알려줘서 고마워요. 더 남기고 싶다면 <a href="${Hub.withSrc('record.html')}">오늘 마음 기록하기</a>로 이어가 보세요.`;
+        Hub.Records.save(mood);
+        const m = Hub.MOODS.find(x => x.key === mood);
+        response.innerHTML = `기록했어요 — "${m.emoji} ${m.label}".`;
+        openNoteBox(mood, '');
+        noteInput.focus();
+        renderEntries();
       });
     });
+
+    noteInput.addEventListener('input', () => {
+      noteCount.textContent = `${noteInput.value.length}/140`;
+    });
+
+    noteSaveBtn.addEventListener('click', () => {
+      if (!selectedMood) return;
+      Hub.Records.save(selectedMood, noteInput.value);
+      const m = Hub.MOODS.find(x => x.key === selectedMood);
+      response.innerHTML = `메모까지 기록했어요 — "${m.emoji} ${m.label}".`;
+      renderEntries();
+    });
+
+    function renderEntries() {
+      const list = document.getElementById('entryList');
+      const all = Hub.Records.getAll().slice(0, 5);
+      if (!all.length) { list.innerHTML = '<div class="sd-entry-empty">아직 쌓인 마음일기가 없어요. 위에서 오늘 기분을 골라보세요.</div>'; return; }
+      list.innerHTML = all.map(r => {
+        const m = Hub.MOODS.find(x => x.key === r.mood);
+        return `<div class="sd-entry"><span class="sd-entry-emoji">${m ? m.emoji : '📝'}</span><span class="sd-entry-date">${r.date.slice(5)}</span><span class="sd-entry-note">${r.note || (m ? m.label : '')}</span></div>`;
+      }).join('');
+    }
+    renderEntries();
+  })();
+
+  // ===== 마음체크 =====
+  (function () {
+    // CI의 정적 참조 검증 스크립트가 href/src 속성값을 파일 텍스트에서 그대로 찾기 때문에,
+    // 아이콘 경로는 완성된 문자열로 들고 있다가 템플릿에는 변수로만 꽂는다(경로를 템플릿 리터럴 안에서 직접 조립하면 오탐함)
+    const TESTS = [
+      { tag: 'FORTUNE', title: '고민타파 타로', desc: '카드 한 장이 건네는 오늘의 힌트', icon: 'images/tarot.svg', link: 'tarot/index.html', v: 'tarot' },
+      { tag: 'LOVE DNA', title: '나의 연애 스타일은?', desc: '관계 속 진짜 내 모습 알아보기', icon: 'images/love.svg', link: 'tests/love.html', v: 'love', isNew: true },
+      { tag: 'CONNECTION', title: '나 지금 외로운 거 맞아?', desc: '내 연결감 지수 확인하기', icon: 'images/loneliness.svg', link: 'tests/loneliness.html', v: 'loneliness' },
+      { tag: 'PRESSURE', title: '스트레스 게이지는 몇 %?', desc: '요즘 나를 짓누르는 압박감 체크', icon: 'images/stress.svg', link: 'tests/stress.html', v: 'stress' },
+      { tag: 'MIND WEATHER', title: '오늘 내 마음 날씨는?', desc: '최근 2주, 마음 일기예보', icon: 'images/mood.svg', link: 'tests/mood.html', v: 'mood' },
+      { tag: 'SELF-WORTH', title: '나는 나를 얼마나 아껴줄까?', desc: '요즘 나를 대하는 방식 체크', icon: 'images/esteem.svg', link: 'tests/esteem.html', v: 'esteem', isNew: true },
+      { tag: 'ENERGY', title: '내 마음의 배터리는 몇 %?', desc: '무기력·방전 지수 확인하기', icon: 'images/burnout.svg', link: 'tests/burnout.html', v: 'burnout', isNew: true },
+      { tag: 'BURNOUT', title: '나, 혹시 번아웃일까?', desc: '공부·알바·취준으로 지친 마음 체크', icon: 'images/jobburnout.svg', link: 'tests/jobburnout.html', v: 'jobburnout', isNew: true }
+    ];
+    document.getElementById('checkGrid').innerHTML = TESTS.map(t => `
+      <a class="sd-card" data-hub-link="${t.link}" data-test="${t.v}">
+        <div class="sd-card-visual sd-v-${t.v}"><img src="${t.icon}" alt="" loading="lazy"></div>
+        <div class="sd-card-body">
+          <div class="sd-card-tagrow"><span class="sd-tag">${t.tag}</span>${t.isNew ? '<span class="sd-tag sd-tag-new">NEW</span>' : ''}</div>
+          <h3>${t.title}</h3>
+          <p>${t.desc}</p>
+          <div class="sd-card-foot"><span>열어보기</span><span>→</span></div>
+        </div>
+      </a>
+    `).join('');
+    document.querySelectorAll('.sd-card').forEach(card => {
+      card.addEventListener('click', () => Hub.log('card_click', card.getAttribute('data-test')));
+    });
+  })();
+
+  // ===== 마음연결 =====
+  (function () {
+    document.getElementById('locGrid').innerHTML = Hub.LOCATIONS.map(loc => `
+      <div class="sd-loc-card">
+        <div class="sd-loc-top"><h3>${loc.name}</h3><span class="sd-loc-badge">${loc.badge}</span></div>
+        <p class="sd-loc-addr">📍 ${loc.address}</p>
+        <p class="sd-loc-desc">${loc.desc}</p>
+        <a class="map" href="${Hub.mapSearchUrl(loc.address)}" target="_blank" rel="noopener">지도에서 보기 →</a>
+      </div>
+    `).join('');
   })();
 </script>
 </body>

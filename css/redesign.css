@@ -1,0 +1,202 @@
+/* 마음서랍 리디자인 프리뷰 전용 스타일 — css/home.css(색상 토큰·폰트) 위에 얹어서 사용.
+   CollectUI(collectui.com) 참고 포인트: 상단 카테고리 탭 내비게이션, 태그 배지가 붙은 카드 그리드,
+   한 번에 하나의 섹션만 보여주는 포커스드 레이아웃. */
+
+.sd-shell { overflow-x: hidden; }
+
+/* ===== 상단 탭 내비게이션 ===== */
+.sd-topbar {
+  position: sticky; top: 0; z-index: 30;
+  background: rgba(251, 248, 241, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #ece4d6;
+}
+.sd-topbar-inner {
+  max-width: 1100px; margin: 0 auto; padding: 18px 28px;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+}
+.sd-brand {
+  display: flex; align-items: center; gap: 10px;
+  color: #2f433b; text-decoration: none; font-size: 19px; font-weight: 700; letter-spacing: -0.03em;
+  flex: none;
+}
+.sd-brand-mark {
+  width: 34px; height: 34px; border-radius: 50% 50% 44% 56%;
+  display: grid; place-items: center; color: #fffaf1; background: #d47759; transform: rotate(-5deg); flex: none;
+}
+.sd-tabs { display: flex; gap: 4px; background: #f1ebe0; padding: 4px; border-radius: 999px; }
+.sd-tab {
+  display: flex; align-items: center; gap: 7px;
+  padding: 9px 16px; border: 0; border-radius: 999px; background: none; cursor: pointer;
+  font-family: inherit; font-size: 13.5px; font-weight: 600; color: #6f6a5c;
+  transition: background 160ms ease, color 160ms ease;
+  white-space: nowrap;
+}
+.sd-tab:hover { color: #4f4a40; }
+.sd-tab.active { background: #fff; color: #bf6246; box-shadow: 0 2px 8px rgba(80, 60, 40, 0.1); }
+.sd-tab-icon { font-size: 15px; line-height: 1; }
+.sd-topbar-cta {
+  flex: none; padding: 9px 16px; border-radius: 999px; border: 1px solid #d8d5ca;
+  background: #fff; color: #2f433b; font-size: 12.5px; font-weight: 600; text-decoration: none;
+}
+
+/* ===== 섹션 공통 ===== */
+.sd-panel { display: none; max-width: 1100px; margin: 0 auto; padding: 48px 28px 90px; animation: sd-fade-in 320ms ease; }
+.sd-panel.active { display: block; }
+@keyframes sd-fade-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.sd-panel-head { margin-bottom: 34px; max-width: 640px; }
+.sd-panel-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin-bottom: 12px;
+  color: #b26047; font-size: 12.5px; font-weight: 700; letter-spacing: 0.04em;
+}
+.sd-panel-head h1 {
+  margin: 0 0 12px; color: #294039; font-family: "Gowun Batang", serif;
+  font-size: clamp(28px, 3.6vw, 40px); line-height: 1.3; letter-spacing: -0.03em;
+}
+.sd-panel-head p { margin: 0; color: #5a6058; font-size: 15px; line-height: 1.75; }
+
+/* ===== CollectUI 느낌의 태그 배지 카드 그리드 (마음체크) ===== */
+.sd-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.sd-card {
+  display: flex; flex-direction: column; text-decoration: none; color: inherit;
+  border-radius: 16px; border: 1px solid #ece4d6; background: #fff;
+  overflow: hidden; transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+.sd-card:hover { transform: translateY(-3px); box-shadow: 0 16px 32px rgba(60, 50, 40, .1); border-color: #e4d6c4; }
+.sd-card-visual {
+  height: 108px; display: grid; place-items: center; position: relative;
+}
+.sd-card-visual img { width: 42px; height: 42px; }
+.sd-card-body { padding: 16px 16px 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.sd-card-tagrow { display: flex; align-items: center; gap: 6px; }
+.sd-tag {
+  padding: 4px 9px; border-radius: 999px; background: #f1ebe0; color: #7a4a30;
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.03em;
+}
+.sd-tag-new { background: #c5684a; color: #fff; }
+.sd-card h3 { margin: 0; font-size: 16px; font-weight: 700; color: #2f352f; line-height: 1.4; }
+.sd-card p { margin: 0; color: #6f6a5c; font-size: 12.5px; line-height: 1.6; flex: 1; }
+.sd-card-foot {
+  margin-top: 4px; padding-top: 10px; border-top: 1px solid #f0ebe0;
+  display: flex; align-items: center; justify-content: space-between; font-size: 11.5px; font-weight: 700; color: #42544c;
+}
+
+/* 마음체크 카드별 배경(visual 영역만 톤 구분, CollectUI의 썸네일 느낌) */
+.sd-v-tarot { background: #ece3f0; } .sd-v-love { background: #f6e4e6; }
+.sd-v-loneliness { background: #e2e9ee; } .sd-v-stress { background: #f6e9df; }
+.sd-v-mood { background: #e9efe2; } .sd-v-esteem { background: #f7edd2; }
+.sd-v-burnout { background: #e4ece9; } .sd-v-jobburnout { background: #efe1d6; }
+
+/* ===== 마음카드 탭 ===== */
+.sd-card-tab { display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: 10px; }
+.sd-card-stage { height: 460px; display: grid; place-items: center; position: relative; width: 100%; max-width: 520px; }
+
+/* 뽑기 3D 플립 카드: 닫힌 면(sd-flip-closed) ↔ 열린 면(lp-heart-card, sd-flip-open) */
+.sd-flip-card { width: 275px; height: 390px; position: relative; z-index: 2; perspective: 1400px; }
+.sd-flip-inner {
+  width: 100%; height: 100%; position: relative; transform-style: preserve-3d;
+  transition: transform 520ms cubic-bezier(.3,.1,.25,1);
+}
+.sd-flip-face {
+  position: absolute; inset: 0; border-radius: 20px; backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.sd-flip-closed {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+  border: 0; cursor: pointer; font-family: inherit;
+  background: linear-gradient(155deg, #e9ddc9, #ddcdae);
+  box-shadow: 0 25px 50px rgba(77, 67, 55, 0.18);
+  color: #8a6a46;
+}
+.sd-flip-closed::before {
+  content: ""; position: absolute; inset: 14px; border: 1.5px dashed rgba(138, 106, 70, 0.3); border-radius: 14px;
+}
+.sd-flip-closed-icon { opacity: 0.55; }
+.sd-flip-closed-text { font-size: 14px; line-height: 1.6; font-weight: 600; }
+.sd-flip-closed:hover { filter: brightness(1.03); }
+
+.sd-flip-open { transform: rotateY(180deg); } /* "뒷면" 고정 회전 — 부모가 180도 돌면 정면으로 상쇄되어 보임 */
+/* 부모 #flipInner의 실제 회전각은 JS가 inline transform으로 계속 누적 제어함(항상 같은 방향으로 더 돎) */
+
+/* ===== 마음일기 탭 ===== */
+.sd-mood-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 28px; }
+.sd-mood-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 18px 10px;
+  border: 1px solid #ece4d6; border-radius: 16px; background: #fff; cursor: pointer;
+  font-family: inherit; font-size: 12.5px; font-weight: 600; color: #4f4a40;
+  transition: border-color 160ms ease, transform 160ms ease, background 160ms ease;
+}
+.sd-mood-btn .sd-mood-emoji { font-size: 26px; }
+.sd-mood-btn:hover, .sd-mood-btn.active { border-color: #c67b62; background: #fffaf4; transform: translateY(-2px); }
+.sd-mood-response {
+  padding: 16px 18px; border-radius: 14px; background: #f3efe6; color: #5c5648; font-size: 13px; line-height: 1.7; margin-bottom: 36px;
+}
+.sd-mood-response a { color: #b26047; font-weight: 700; }
+
+/* 기분을 고르면 바로 아래 펼쳐지는 메모 입력 영역 */
+.sd-mood-note {
+  margin-bottom: 18px; padding: 18px; border: 1px solid #ece4d6; border-radius: 16px; background: #fff;
+  animation: sd-fade-in 220ms ease;
+}
+.sd-mood-note label { display: block; margin-bottom: 10px; font-size: 13px; font-weight: 700; color: #4f4a40; }
+.sd-mood-note label span { font-weight: 400; color: #8c8572; }
+.sd-mood-note textarea {
+  width: 100%; box-sizing: border-box; border: 1px solid #ece4d6; border-radius: 12px; padding: 12px 14px;
+  font-family: inherit; font-size: 13.5px; line-height: 1.6; color: #3f3a32; resize: vertical; min-height: 64px;
+}
+.sd-mood-note textarea:focus { outline: none; border-color: #c67b62; }
+.sd-mood-note-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+.sd-mood-note-foot span { font-size: 11px; color: #8c8572; }
+.sd-mood-note-foot button {
+  border: 0; padding: 9px 18px; border-radius: 999px; background: #bf6246; color: #fff;
+  font-family: inherit; font-size: 12.5px; font-weight: 700; cursor: pointer;
+}
+.sd-mood-note-foot button:hover { background: #a9553b; }
+.sd-subhead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.sd-subhead h2 { margin: 0; font-size: 17px; font-weight: 700; color: #2f352f; }
+.sd-subhead a { font-size: 12px; color: #6f6a5c; text-decoration: none; font-weight: 600; }
+.sd-entry-row { display: flex; flex-direction: column; gap: 10px; }
+.sd-entry {
+  display: flex; align-items: center; gap: 14px; padding: 14px 16px;
+  border: 1px solid #ece4d6; border-radius: 14px; background: #fff;
+}
+.sd-entry-emoji { font-size: 22px; flex: none; }
+.sd-entry-date { font-size: 11px; color: #8c8572; font-weight: 700; flex: none; width: 70px; }
+.sd-entry-note { font-size: 13px; color: #4f4a40; flex: 1; }
+.sd-entry-empty { padding: 24px; text-align: center; color: #8c8572; font-size: 13px; border: 1px dashed #ddd3c2; border-radius: 14px; }
+
+/* ===== 마음연결 탭 ===== */
+.sd-connect-cta {
+  display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 32px;
+}
+.sd-connect-cta a {
+  display: flex; align-items: center; gap: 8px; padding: 13px 18px; border-radius: 999px;
+  font-size: 13px; font-weight: 700; text-decoration: none;
+}
+.sd-connect-cta a.primary { background: #bf6246; color: #fff; }
+.sd-connect-cta a.ghost { background: #fff; color: #2f433b; border: 1px solid #ddd3c2; }
+.sd-loc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.sd-loc-card { padding: 18px 20px; border: 1px solid #ece4d6; border-radius: 16px; background: #fff; }
+.sd-loc-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.sd-loc-badge { padding: 3px 9px; border-radius: 999px; background: #e0e8e6; color: #2e4840; font-size: 10.5px; font-weight: 700; }
+.sd-loc-card h3 { margin: 0 0 6px; font-size: 15.5px; font-weight: 700; color: #2f352f; }
+.sd-loc-addr { margin: 0 0 8px; font-size: 12.5px; color: #6f6a5c; line-height: 1.65; }
+.sd-loc-desc { margin: 0 0 10px; font-size: 12.5px; color: #4a453a; line-height: 1.65; }
+.sd-loc-card a.map { font-size: 11.5px; font-weight: 700; color: #b26047; text-decoration: none; }
+
+@media (max-width: 900px) {
+  .sd-grid { grid-template-columns: repeat(2, 1fr); }
+  .sd-loc-grid { grid-template-columns: 1fr; }
+  .sd-topbar-inner { flex-wrap: wrap; gap: 12px; padding: 14px 20px; }
+  .sd-tabs { order: 3; width: 100%; justify-content: space-between; }
+  .sd-topbar-cta { display: none; }
+}
+@media (max-width: 560px) {
+  .sd-grid { grid-template-columns: 1fr 1fr; }
+  .sd-tab span.sd-tab-label { display: none; }
+  .sd-tab { padding: 10px 13px; }
+  .sd-mood-row { grid-template-columns: 1fr 1fr; }
+  .sd-card-stage { height: 410px; }
+  .sd-flip-card { width: 240px; height: 345px; }
+}

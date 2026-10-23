@@ -1,6 +1,6 @@
 /**
- * 마음카드 허브 - 공통 유틸 (유입경로 추적 + 센터 연결 정보)
- * 마음카드 전용 Supabase 프로젝트(loneliness, pkaczonddvmhwwyhmxmt)를 사용합니다.
+ * 마음서랍 허브 - 공통 유틸 (유입경로 추적 + 센터 연결 정보)
+ * 마음서랍 전용 Supabase 프로젝트(loneliness, pkaczonddvmhwwyhmxmt)를 사용합니다.
  * 사전 준비: Supabase에 hub_events, applications 테이블 생성 필요
  * (supabase_setup.sql, supabase_applications_setup.sql 참고 — 이미 이 프로젝트에 실행 완료됨)
  */
@@ -50,7 +50,7 @@ function mapSearchUrl(address) {
 }
 
 // ===== 오늘의 한마디 (매일 바뀌는 가벼운 공감 멘트) =====
-// "마음카드"(검사 갤러리 브랜드)와는 별개 개념 — 기획구성안.md §3 용어 정리 참고
+// 마음서랍 홈의 "마음카드" 탭(뽑기 인터랙션)에서 쓰는 멘트 소스 — 기획구성안.md §3 용어 정리 참고
 const QUOTES = [
   { id: 'q01', tag: '쉼', text: '오늘 아무것도 안 해도 괜찮아요. 쉬는 것도 하루의 몫이에요.' },
   { id: 'q02', tag: '위로', text: '혼자인 시간이 꼭 외로움은 아니에요. 가끔은 그냥 혼자이고 싶은 거예요.' },
