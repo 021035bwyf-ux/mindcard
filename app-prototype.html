@@ -70,6 +70,12 @@
     font-family: var(--font-hand); font-size: 14px; color: var(--ink-2);
   }
 
+  .fold-bar { display: flex; flex-direction: column; align-items: center; gap: 6px; width: calc(100% - 36px); margin: 6px 18px 0; padding: 6px 0 4px; border: 0; background: none; cursor: pointer;
+    font-family: var(--font-hand); font-size: 14px; color: var(--ink-2); }
+  .fold-bar[hidden] { display: none; }
+  .fold-grip { width: 44px; height: 5px; border-radius: 3px; background: rgba(120, 78, 48, .25); }
+  .app.room-big .drawer-cards { display: none; }
+  .app.room-big .stage, .app.world .stage { height: max(360px, min(150vw, calc(100dvh - 300px))); }
   .drawer-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 10px 18px 0; }
   .dcard {
     position: relative; display: flex; flex-direction: column; gap: 4px; min-height: 92px; padding: 16px 16px 14px;
@@ -500,6 +506,7 @@
       <button class="pill pill-cream" type="button" id="btnFarmBack">🏝️ 마을로</button>
     </section>
 
+    <button class="fold-bar" type="button" id="btnDrawerFold" aria-expanded="true" aria-controls="drawerCards"><span class="fold-grip" aria-hidden="true"></span><span id="foldLabel">서랍 접고 방 크게 보기 ▾</span></button>
     <div class="drawer-cards" id="drawerCards">
       <button class="dcard" type="button" data-drawer="card"><span class="dcard-chip" style="background:var(--l-card)"></span><strong>마음카드</strong><span class="sub">오늘 나에게 건네는 한 장</span></button>
       <button class="dcard" type="button" data-drawer="diary"><span class="dcard-chip" style="background:var(--l-diary)"></span><strong>마음일기</strong><span class="sub">내 이야기를 넣어두는 곳</span><span class="badge" id="diaryBadge" hidden>0</span></button>
@@ -676,7 +683,7 @@ function resize() {
   renderer.domElement.style.height = '100%';
   camera.aspect = w / h;
   fit = Math.max(1, 0.95 / camera.aspect);
-  HOME.R = 21 * fit;
+  HOME.R = 21 * (roomBig && mode === 'home' ? Math.max(1, fit * 0.8) : fit);
   if (GOALS[mode]) goal = GOALS[mode]();
   camera.updateProjectionMatrix();
 }
@@ -1354,6 +1361,20 @@ const GREETS = {
   visit: ['마음 마을', '친구에게 마음을 전해보세요.'],
   farm: ['마음 텃밭', '오늘의 마음카드를 캐거나 낚아볼까요?']
 };
+// 홈 서랍 카드 접기: 접으면 내 방이 크게 보임 (이 기기에 기억)
+let roomBig = false;
+try { roomBig = localStorage.getItem('mdr_room_big') === '1'; } catch (e) {}
+function applyRoomBig() {
+  document.querySelector('.app').classList.toggle('room-big', mode === 'home' && roomBig);
+  $('btnDrawerFold').setAttribute('aria-expanded', String(!roomBig));
+  $('foldLabel').textContent = roomBig ? '서랍 펼치기 ▴' : '서랍 접고 방 크게 보기 ▾';
+}
+$('btnDrawerFold').addEventListener('click', () => {
+  roomBig = !roomBig;
+  try { localStorage.setItem('mdr_room_big', roomBig ? '1' : '0'); } catch (e) {}
+  applyRoomBig();
+});
+applyRoomBig();
 function setMode(next, instant) {
   mode = next;
   if (GOALS[next]) goal = GOALS[next]();
@@ -1369,6 +1390,8 @@ function setMode(next, instant) {
   $('stageActions').hidden = next !== 'home';
   document.querySelectorAll('.greet .replay').forEach(b => { b.hidden = next !== 'home'; });
   $('drawerCards').hidden = next !== 'home';
+  $('btnDrawerFold').hidden = next !== 'home';
+  document.querySelector('.app').classList.toggle('room-big', next === 'home' && roomBig);
   $('decoPanel').hidden = next !== 'decorate';
   $('villagePanel').hidden = !(next === 'village' || next === 'visit');
   const inWorld = next === 'village' || next === 'visit' || next === 'farm';
