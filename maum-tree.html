@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f3dcc3">
+<title>마음서랍 - 마음 나무</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-1: #f6e2cb; --bg-2: #e6bf9c; --cream: #fffaf2; --cream-2: #f6ecdd;
+    --ink: #3b2c22; --ink-2: #6a5646; --ink-3: #9a8571; --teal: #2f7d66; --coral: #e57f62; --coral-deep: #c0613f;
+    --clay: 0 6px 0 rgba(120, 78, 48, .16), 0 14px 26px rgba(90, 55, 30, .14), inset 0 2px 0 rgba(255, 255, 255, .85);
+    --font-hand: "Jua", "Noto Sans KR", sans-serif;
+    --ease-out: cubic-bezier(.22, 1, .36, 1);
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; overflow-x: clip; }
+  body { font-family: "Noto Sans KR", sans-serif; color: var(--ink); background: #d9b38f; }
+  :focus-visible { outline: 3px solid rgba(229, 127, 98, .6); outline-offset: 3px; }
+  .app { position: relative; max-width: 430px; min-height: 100dvh; margin: 0 auto; padding-bottom: 40px; overflow: hidden;
+    background: radial-gradient(120% 60% at 50% 22%, var(--bg-1), var(--bg-2)); }
+
+  .head { display: flex; align-items: center; gap: 12px; padding: 20px 18px 0; }
+  .round-btn { width: 46px; height: 46px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--cream); box-shadow: var(--clay); color: var(--ink); }
+  .head h1 { margin: 0; font-family: var(--font-hand); font-weight: 400; font-size: 26px; }
+  .demo { margin: 10px 18px 0; font-size: 12px; color: var(--ink-2); opacity: .85; }
+
+  .stage { position: relative; height: min(100vw, 400px); }
+  .stage canvas { display: block; width: 100%; height: 100%; }
+  .me-tag { position: absolute; transform: translate(-50%, -130%); padding: 4px 10px; border-radius: 12px; background: var(--coral); color: #fff;
+    font-family: var(--font-hand); font-size: 14px; box-shadow: 0 3px 0 var(--coral-deep); pointer-events: none; opacity: 0; transition: opacity 400ms; white-space: nowrap; }
+  .me-tag.show { opacity: 1; }
+  .legend-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px 14px; margin: -4px 18px 0; font-size: 12.5px; color: var(--ink-2); }
+  .legend-row i { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+
+  .seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; margin: 16px 18px 0; padding: 5px; border-radius: 24px; background: var(--cream); box-shadow: var(--clay); }
+  .seg button { min-height: 44px; border: 0; border-radius: 19px; background: none; cursor: pointer; font-family: var(--font-hand); font-size: 16px; color: var(--ink-3); white-space: nowrap; }
+  .seg button[aria-selected="true"] { background: #e3efe3; color: var(--teal); box-shadow: inset 0 2px 4px rgba(79, 138, 120, .18); }
+
+  .panel { margin: 14px 18px 0; padding: 18px; border-radius: 24px; background: var(--cream); box-shadow: var(--clay); }
+  .panel[hidden] { display: none; }
+  .hero-k { font-size: 13.5px; color: var(--ink-2); }
+  .hero-v { margin-top: 2px; font-family: var(--font-hand); font-size: 44px; line-height: 1.15; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .hero-v small { font-size: 18px; color: var(--ink-2); }
+  .goal-track { position: relative; height: 12px; margin: 12px 0 30px; border-radius: 6px; background: var(--cream-2); box-shadow: inset 0 2px 3px rgba(90,55,30,.12); }
+  .goal-fill { height: 100%; border-radius: 4px 6px 6px 4px; background: var(--teal); animation: grow 900ms var(--ease-out); transform-origin: left; }
+  @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  .goal-pin { position: absolute; top: -5px; width: 2px; height: 22px; background: var(--ink); }
+  .goal-pin span { position: absolute; top: 24px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 12px; font-weight: 700; }
+  .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 16px; }
+  .fact { padding: 10px 8px; border-radius: 16px; background: var(--cream-2); text-align: center; }
+  .fact b { display: block; font-family: var(--font-hand); font-weight: 400; font-size: 22px; }
+  .fact span { font-size: 11.5px; color: var(--ink-2); }
+  .panel h2 { margin: 6px 0 6px; font-family: var(--font-hand); font-weight: 400; font-size: 18px; }
+  .panel p.note { margin: 6px 0 0; font-size: 13px; line-height: 1.65; color: var(--ink-2); }
+  .chips { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 10px 0 4px; }
+  .chip { padding: 6px 12px; border-radius: 14px; font-family: var(--font-hand); font-size: 15px; color: #fff; }
+  .chip.light { color: var(--ink); }
+  .arrow { color: var(--ink-3); font-size: 18px; }
+  .bloom { margin-top: 10px; padding: 12px 14px; border-radius: 16px; background: #fde9e3; font-size: 14px; line-height: 1.6; }
+  details.table { margin-top: 10px; font-size: 13px; }
+  details.table summary { cursor: pointer; color: var(--ink-2); }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div class="app">
+  <div class="head">
+    <a class="round-btn" href="app-prototype.html" aria-label="내 방으로 돌아가기">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </a>
+    <h1>마음 나무</h1>
+  </div>
+  <p class="demo">예시 데이터예요. 실제로는 동의한 친구들의 외로움 점수 변화만 모여요. 일기 내용은 모이지 않아요.</p>
+
+  <div class="stage" id="stage">
+    <canvas id="treeCanvas" role="img" aria-label="참여한 친구 수만큼 잎이 돋은 나무. 마음이 가벼워진 친구의 잎에는 꽃이 피어 있어요."></canvas>
+    <div class="me-tag" id="meTag">나</div>
+  </div>
+  <div class="legend-row" aria-hidden="true">
+    <span><i style="background:#6aa58f"></i>함께하는 친구</span>
+    <span><i style="background:#f2a7b0"></i>마음이 가벼워진 친구</span>
+    <span><i style="background:#f2c94c"></i>목표를 향한 열매</span>
+  </div>
+
+  <div class="seg" role="tablist" aria-label="보기">
+    <button role="tab" aria-selected="true" aria-controls="pAll" id="tAll">모두의 나무</button>
+    <button role="tab" aria-selected="false" aria-controls="pMe" id="tMe">나의 변화</button>
+    <button role="tab" aria-selected="false" aria-controls="pPos" id="tPos">나의 위치</button>
+  </div>
+
+  <section class="panel" id="pAll" role="tabpanel" aria-labelledby="tAll">
+    <div class="hero-k">함께 가벼워진 마음</div>
+    <div class="hero-v" id="allRate"></div>
+    <div class="goal-track" aria-hidden="true"><div class="goal-fill" id="allFill"></div><div class="goal-pin" id="allPin"><span>목표 20%</span></div></div>
+    <div class="facts">
+      <div class="fact"><b id="fLeaves"></b><span>함께하는 잎</span></div>
+      <div class="fact"><b id="fBlooms"></b><span>꽃 핀 잎</span></div>
+      <div class="fact"><b id="fFruits"></b><span>열린 열매</span></div>
+    </div>
+    <h2>달마다 이만큼 자랐어요</h2>
+    <div id="allTrend"></div>
+    <p class="note">꽃은 처음보다 마음이 한 단계 가벼워진 친구예요. 모두의 꽃이 많아질수록 열매가 열리고, 목표 20%가 되면 열매가 가득 열려요.</p>
+  </section>
+
+  <section class="panel" id="pMe" role="tabpanel" aria-labelledby="tMe" hidden>
+    <div class="hero-k">처음보다</div>
+    <div class="hero-v" id="meDelta"></div>
+    <div class="chips" id="meChips"></div>
+    <div class="bloom" id="meBloom"></div>
+    <h2>나의 외로움 점수</h2>
+    <div id="meChart"></div>
+    <p class="note">점수가 낮을수록 마음이 가벼운 상태예요. 4주마다 마음체크의 외로움 검사를 하면 여기에 쌓여요.</p>
+    <details class="table"><summary>표로 보기</summary><div id="meTable"></div></details>
+  </section>
+
+  <section class="panel" id="pPos" role="tabpanel" aria-labelledby="tPos" hidden>
+    <h2 id="posTitle"></h2>
+    <div id="posChart"></div>
+    <p class="note">순위가 아니에요. 지금 나와 비슷한 마음인 친구들이 이만큼 함께 있다는 뜻이에요. 어느 구간이든 이 나무의 소중한 잎이에요.</p>
+    <details class="table"><summary>표로 보기</summary><div id="posTable"></div></details>
+  </section>
+</div>
+
+<style id="mcCss"></style>
+<script type="module">
+import * as THREE from 'three';
+import { createClayRenderer } from './js/clay-scene.js';
+import { createTreeIsland } from './js/tree-island.js';
+import { generateMockCohort, computeOutcomes, BANDS, bandOf, TARGET_RATE, MOCK_ME } from './js/outcomes.js';
+import { lineChart, barList, dataTable, MINI_CHART_CSS } from './js/mini-charts.js';
+
+const $ = id => document.getElementById(id);
+document.getElementById('mcCss').textContent = MINI_CHART_CSS;
+const pct = (v, d = 1) => (v * 100).toFixed(d) + '%';
+const fmtDay = ts => { const d = new Date(ts); return `${d.getMonth() + 1}월 ${d.getDate()}일`; };
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const people = generateMockCohort();
+const o = computeOutcomes(people);
+const me = MOCK_ME.measures;
+const meFirst = me[0].score, meLast = me[me.length - 1].score;
+const meResolved = meFirst >= 8 && bandOf(meLast) < bandOf(meFirst);
+const FRUITS_MAX = 10;
+const fruits = Math.round(Math.min(1, o.rate / TARGET_RATE) * FRUITS_MAX);
+
+// ===== 모두의 나무 =====
+$('allRate').innerHTML = `${pct(o.rate)} <small>/ 목표 20%</small>`;
+$('allFill').style.width = Math.min(100, (o.rate / 0.3) * 100) + '%';
+$('allPin').style.left = (TARGET_RATE / 0.3) * 100 + '%';
+$('fLeaves').textContent = people.length + 1;
+$('fBlooms').textContent = o.resolved + (meResolved ? 1 : 0);
+$('fFruits').textContent = `${fruits}/${FRUITS_MAX}`;
+lineChart($('allTrend'), {
+  points: o.trend.filter(t => t.followed > 0).map(t => ({ label: t.label, value: t.rate, sub: `${t.followed}명 중 ${t.resolved}명의 마음이 가벼워졌어요` })),
+  yMax: 0.3, yTicks: 3, target: TARGET_RATE, targetLabel: '목표 20%', fmt: v => Math.round(v * 100) + '%', height: 200, ariaLabel: '달마다 함께 가벼워진 마음 비율'
+});
+
+// ===== 나의 변화 =====
+const delta = meFirst - meLast;
+$('meDelta').innerHTML = delta > 0 ? `${delta}점 가벼워졌어요` : delta === 0 ? '비슷하게 지내고 있어요' : '조금 무거워졌어요';
+const bf = BANDS[bandOf(meFirst)], bl = BANDS[bandOf(meLast)];
+$('meChips').innerHTML = `<span class="chip${bandOf(meFirst) === 0 ? ' light' : ''}" style="background:${bf.color}">${bf.name}</span><span class="arrow" aria-label="에서">→</span><span class="chip${bandOf(meLast) === 0 ? ' light' : ''}" style="background:${bl.color}">${bl.name}</span>`;
+$('meBloom').textContent = meResolved
+  ? '🌸 한 단계 가벼워져서, 나무에 있는 내 잎에 꽃이 피었어요.'
+  : '🌱 내 잎은 나무에서 함께 자라고 있어요. 천천히 가도 괜찮아요.';
+lineChart($('meChart'), {
+  points: me.map(m => ({ label: fmtDay(m.ts), value: m.score, sub: BANDS[bandOf(m.score)].name })),
+  yMax: 30, yTicks: 3, fmt: v => Math.round(v) + '점', color: '#e57f62', height: 190, ariaLabel: '나의 외로움 점수 변화'
+});
+dataTable($('meTable'), ['날짜', '점수', '구간'], me.map(m => [fmtDay(m.ts), m.score + '점', BANDS[bandOf(m.score)].name]));
+
+// ===== 나의 위치 =====
+const myBand = bandOf(meLast);
+const current = o.current.slice();
+current[myBand] += 1;
+$('posTitle').textContent = `지금 나와 같은 "${BANDS[myBand].name}"에 ${current[myBand]}명이 함께 있어요`;
+barList($('posChart'), BANDS.map((b, i) => ({ label: b.name, value: current[i], valueText: current[i] + '명', color: b.color, highlight: i === myBand, note: `${i ? BANDS[i - 1].max + 1 : 0}~${b.max}점` })), { mark: '나' });
+dataTable($('posTable'), ['구간', '점수', '인원'], BANDS.map((b, i) => [b.name + (i === myBand ? ' (나)' : ''), `${i ? BANDS[i - 1].max + 1 : 0}~${b.max}점`, current[i] + '명']));
+
+// 탭
+const tabs = [['tAll', 'pAll'], ['tMe', 'pMe'], ['tPos', 'pPos']];
+tabs.forEach(([t, p]) => $(t).addEventListener('click', () => {
+  tabs.forEach(([t2, p2]) => { $(t2).setAttribute('aria-selected', String(t2 === t)); $(p2).hidden = p2 !== p; });
+}));
+
+// ===== 3D 마음 나무 =====
+const stage = $('stage');
+const renderer = createClayRenderer();
+const canvas = $('treeCanvas');
+renderer.domElement.setAttribute('role', 'img');
+renderer.domElement.setAttribute('aria-label', canvas.getAttribute('aria-label'));
+canvas.replaceWith(renderer.domElement);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 200);
+scene.add(new THREE.HemisphereLight(0xfff1de, 0x9fc2aa, 1.3));
+const sun = new THREE.DirectionalLight(0xffffff, 1.6);
+sun.position.set(5, 11, 7);
+sun.castShadow = true;
+sun.shadow.mapSize.set(1024, 1024);
+Object.assign(sun.shadow.camera, { left: -5, right: 5, top: 7, bottom: -3, near: 0.5, far: 30 });
+sun.shadow.normalBias = 0.02;
+scene.add(sun);
+
+// 나무 섬 (공용 모듈) — 참여자 = 잎, 해소된 친구 = 꽃, 목표 대비 = 열매
+const tree = createTreeIsland({ leaves: people.map(p => ({ resolved: o.resolvedIds.has(p.id) })), me: { resolved: meResolved }, fruits, fruitsMax: FRUITS_MAX, reduceMotion: reduce });
+scene.add(tree.root);
+const meLeaf = tree.meLeaf;
+
+function resize() {
+  const w = stage.clientWidth, h = stage.clientHeight;
+  renderer.setSize(w, h, false);
+  renderer.domElement.style.width = '100%';
+  renderer.domElement.style.height = '100%';
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(stage);
+resize();
+
+const meTag = $('meTag');
+const proj = new THREE.Vector3();
+const start = performance.now();
+function frame(now) {
+  const t = (now - start) / 1000;
+  tree.update(t);
+  const R = 15.5 * Math.max(1, 0.95 / camera.aspect), a = 0.5 + Math.sin(t * 0.2) * 0.25, e = 0.28;
+  camera.position.set(R * Math.cos(e) * Math.sin(a), 2.4 + R * Math.sin(e), R * Math.cos(e) * Math.cos(a));
+  camera.lookAt(0, 2.3, 0);
+  renderer.render(scene, camera);
+
+  // "나" 이름표: 내 잎이 카메라 쪽을 향할 때만
+  proj.copy(meLeaf.p).project(camera);
+  const facing = meLeaf.dir.dot(camera.position.clone().sub(meLeaf.p).normalize()) > 0.1;
+  meTag.classList.toggle('show', t > 3 && facing);
+  meTag.style.left = ((proj.x + 1) / 2 * 100) + '%';
+  meTag.style.top = ((1 - proj.y) / 2 * 100) + '%';
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

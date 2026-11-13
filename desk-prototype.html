@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f4ead9">
+<title>마음서랍 - 책상 프로토타입</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --wall: #f4ead9;
+    --paper: #fffaf0;
+    --line: #5b3a28;
+    --ink: #3b2c22;
+    --ink-2: #6a5646;
+    --ink-3: #9a8571;
+    --coral: #d9735a;
+    --coral-dark: #b85a43;
+    --wood: #b77a52;
+    --wood-dark: #8f5c3c;
+
+    --em-joy: #f7d77c;
+    --em-calm: #bfd7b2;
+    --em-sad: #b9d0e8;
+    --em-anx: #d6c6ec;
+    --em-angry: #f2b8ad;
+    --em-tired: #e2d3bd;
+
+    --font-hand: "Jua", "Noto Sans KR", sans-serif;
+    --font-body: "Noto Sans KR", sans-serif;
+    --ease-out: cubic-bezier(.22, 1, .36, 1);
+    --ease-in: cubic-bezier(.55, 0, .75, .2);
+
+    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .36 0 0 0 0 .24 0 0 0 0 .14 0 0 0 .11 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; overflow-x: clip; }
+  body { font-family: var(--font-body); color: var(--ink); background: var(--grain), #e8dbc6; }
+  button { font: inherit; color: inherit; }
+  :focus-visible { outline: 3px solid rgba(217, 115, 90, .55); outline-offset: 3px; border-radius: 8px; }
+
+  .app {
+    position: relative; max-width: 430px; min-height: 100dvh; margin: 0 auto; overflow: hidden;
+    background: var(--grain), var(--wall);
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  }
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ===== 책상 ===== */
+  .greet { padding: 26px 24px 0; }
+  .greet-date { font-size: 13px; color: var(--ink-3); }
+  .greet h1 { margin: 6px 0 0; font-family: var(--font-hand); font-weight: 400; font-size: 27px; line-height: 1.35; color: var(--ink); }
+  .scene-wrap { margin-top: 4px; transform-origin: 50% 60%; }
+  .scene { display: block; width: 100%; height: auto; }
+  .scene text { pointer-events: none; }
+  .dr { cursor: pointer; outline: none; }
+  .dr .front { transform-box: fill-box; transform-origin: 50% 50%; transition: transform 160ms var(--ease-out); }
+  .dr:hover .front, .dr:focus-visible .front { transform: translateY(2px); }
+  .dr:focus-visible .focus-ring { opacity: 1; }
+  .focus-ring { opacity: 0; }
+  .dr.opening .front { animation: pull 520ms var(--ease-out) forwards; }
+  @keyframes pull {
+    0% { transform: translateY(0) scale(1); }
+    35% { transform: translateY(-3px) scale(1); }
+    100% { transform: translateY(30px) scale(1.055); }
+  }
+  .dr .inside { opacity: 0; }
+  .dr.opening .inside { animation: reveal 520ms var(--ease-out) forwards; }
+  @keyframes reveal { 0%, 30% { opacity: 0; } 100% { opacity: 1; } }
+
+  .lamp-glow { animation: lamp-on 1.4s var(--ease-out) both; }
+  @keyframes lamp-on { 0% { opacity: 0; } 18% { opacity: .55; } 26% { opacity: .15; } 40% { opacity: .9; } 100% { opacity: 1; } }
+  .steam path { stroke-dasharray: 34 60; animation: steam 3.6s linear infinite; }
+  .steam path:nth-child(2) { animation-delay: 1.6s; }
+  @keyframes steam { from { stroke-dashoffset: 94; opacity: 0; } 25% { opacity: .9; } to { stroke-dashoffset: 0; opacity: 0; } }
+  .plant-leaves { transform-box: fill-box; transform-origin: 50% 100%; animation: sway 6s ease-in-out infinite; }
+  @keyframes sway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2.5deg); } }
+
+  .desk-hint { margin: 2px 24px 0; text-align: center; font-family: var(--font-hand); font-size: 15px; color: var(--ink-3); }
+
+  /* ===== 마음일기 서랍 ===== */
+  .sub-head { display: flex; align-items: center; gap: 10px; padding: 20px 18px 4px; }
+  .back {
+    width: 44px; height: 44px; border: 0; background: none; cursor: pointer; display: grid; place-items: center; color: var(--line);
+  }
+  .sub-head h1 { margin: 0; font-family: var(--font-hand); font-weight: 400; font-size: 24px; }
+
+  .box {
+    position: relative; margin: 12px 16px 0; padding: 22px 16px 26px; min-height: 250px; border-radius: 16px;
+    background: var(--grain), var(--wood-dark);
+    box-shadow: inset 0 16px 24px rgba(40, 20, 8, .35);
+  }
+  .box::before {
+    content: ""; position: absolute; inset: 12px; border-radius: 9px;
+    background: var(--grain), #b57c55; box-shadow: inset 0 10px 14px rgba(60, 30, 12, .3);
+  }
+  .box::after {
+    content: ""; position: absolute; inset: 2px; border-radius: 15px; border: 2.4px solid var(--line);
+    filter: url(#wobble); pointer-events: none;
+  }
+  .box.rise { animation: rise 560ms var(--ease-out); }
+  @keyframes rise { from { transform: translateY(60px) scale(.94); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  .notes { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 10px; }
+  .note {
+    position: relative; min-height: 92px; padding: 18px 9px 9px; border: 0; background: none; cursor: pointer;
+    display: flex; flex-direction: column; gap: 6px; text-align: left; isolation: isolate;
+    transition: transform 180ms var(--ease-out);
+  }
+  .note::before {
+    content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 3px;
+    background: var(--grain), var(--paper); border: 1.6px solid var(--line);
+    box-shadow: 2px 3px 0 rgba(60, 30, 12, .22); filter: url(#wobble);
+  }
+  .note-tape {
+    position: absolute; top: -7px; left: 50%; width: 46px; height: 15px; transform: translateX(-50%) rotate(-4deg);
+    opacity: .85; clip-path: polygon(3% 0, 97% 6%, 100% 50%, 96% 100%, 4% 94%, 0 50%);
+  }
+  .note:hover, .note:focus-visible { transform: translateY(-4px) rotate(0deg) !important; }
+  .note-emo { font-family: var(--font-hand); font-size: 15px; line-height: 1.3; color: var(--ink); word-break: keep-all; overflow-wrap: anywhere; }
+  .note-date { margin-top: auto; font-size: 11px; color: var(--ink-3); }
+  .note.landing { animation: land 520ms var(--ease-out); }
+  @keyframes land { 0% { transform: translateY(-28px) scale(1.12) rotate(-8deg); opacity: 0; } 60% { opacity: 1; } 100% { } }
+  .empty { position: relative; z-index: 1; grid-column: 1 / -1; padding: 44px 10px; text-align: center; font-family: var(--font-hand); font-size: 17px; line-height: 1.6; color: #fcefdc; }
+
+  .actions { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; margin: 20px 16px 0; }
+  .btn {
+    position: relative; isolation: isolate; min-height: 54px; padding: 0 14px; border: 0; background: none; cursor: pointer;
+    font-family: var(--font-hand); font-size: 18px; white-space: nowrap; transition: transform 140ms var(--ease-out);
+  }
+  .btn::before {
+    content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 28px; border: 2.2px solid var(--line);
+    filter: url(#wobble); transition: transform 140ms var(--ease-out);
+  }
+  .btn:active { transform: scale(.97); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn-coral { color: #fff; }
+  .btn-coral::before { background: var(--grain), var(--coral); box-shadow: 2px 3px 0 var(--coral-dark); }
+  .btn-paper::before { background: var(--grain), var(--paper); box-shadow: 2px 3px 0 rgba(60, 30, 12, .18); }
+
+  .week { position: relative; margin: 24px 16px 0; padding: 18px 18px 16px; isolation: isolate; }
+  .week::before {
+    content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 14px;
+    background: var(--grain), var(--paper); border: 1.8px solid var(--line); filter: url(#wobble);
+  }
+  .week h2 { margin: 0 0 12px; font-family: var(--font-hand); font-weight: 400; font-size: 18px; }
+  .week-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; font-size: 13px; color: var(--ink-2); }
+  .week-row .nm { width: 34px; flex: none; font-family: var(--font-hand); font-size: 15px; color: var(--ink); }
+  .week-row svg { flex: 1; height: 16px; min-width: 0; }
+  .week-row .ct { width: 18px; text-align: right; flex: none; }
+  .week-empty { font-size: 13.5px; color: var(--ink-3); }
+
+  /* ===== 시트 ===== */
+  .scrim { position: fixed; inset: 0; z-index: 40; background: rgba(45, 28, 16, .38); opacity: 0; pointer-events: none; transition: opacity 260ms; }
+  .scrim.show { opacity: 1; pointer-events: auto; }
+  .sheet {
+    position: fixed; left: 50%; bottom: 0; z-index: 41; width: 100%; max-width: 430px; max-height: 90dvh; overflow-y: auto;
+    transform: translate(-50%, 106%); transition: transform 380ms var(--ease-out);
+    background: var(--grain), var(--paper); border-radius: 24px 24px 0 0;
+    padding: 26px 20px calc(22px + env(safe-area-inset-bottom));
+    box-shadow: 0 -6px 0 rgba(91, 58, 40, .12);
+  }
+  .sheet.show { transform: translate(-50%, 0); }
+  .sheet-tape {
+    position: absolute; top: -9px; left: 50%; width: 92px; height: 22px; transform: translateX(-50%) rotate(-2deg);
+    background: rgba(217, 115, 90, .55); clip-path: polygon(2% 8%, 98% 0, 100% 50%, 97% 100%, 3% 92%, 0 50%);
+  }
+  .sheet h3 { margin: 0 0 4px; font-family: var(--font-hand); font-weight: 400; font-size: 23px; }
+  .sheet .sub { margin: 0 0 16px; font-size: 13.5px; line-height: 1.6; color: var(--ink-2); }
+  .fam { margin-bottom: 12px; }
+  .fam-name { margin-bottom: 7px; font-size: 12.5px; font-weight: 700; color: var(--ink-3); }
+  .stickers { display: flex; flex-wrap: wrap; gap: 8px; }
+  .sticker {
+    min-height: 40px; padding: 0 14px; border-radius: 20px; border: 0; cursor: pointer;
+    font-family: var(--font-hand); font-size: 16px; white-space: nowrap; color: var(--ink);
+    box-shadow: 0 0 0 3px #fff, 1px 3px 0 3px rgba(60, 30, 12, .14);
+    transition: transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+  }
+  .sticker:nth-child(odd) { transform: rotate(-1.5deg); }
+  .sticker:nth-child(even) { transform: rotate(1.2deg); }
+  .sticker[aria-pressed="true"] { transform: rotate(0) scale(1.06); box-shadow: 0 0 0 3px #fff, 0 0 0 5.5px var(--line), 1px 4px 0 5px rgba(60, 30, 12, .14); }
+  .field { display: block; margin: 20px 0 8px; font-size: 13.5px; font-weight: 700; color: var(--ink-2); }
+  .field span { font-weight: 400; color: var(--ink-3); }
+  .lined {
+    position: relative; isolation: isolate;
+  }
+  .lined::before {
+    content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 12px; border: 1.8px solid var(--line); filter: url(#wobble);
+    background: repeating-linear-gradient(to bottom, transparent 0 31px, rgba(91, 58, 40, .14) 31px 32px), #fff;
+  }
+  textarea {
+    display: block; width: 100%; min-height: 128px; padding: 8px 14px; border: 0; background: transparent; resize: vertical;
+    font-family: var(--font-hand); font-size: 17px; line-height: 32px; color: var(--ink);
+  }
+  textarea:focus { outline: none; }
+  .lined:focus-within::before { border-color: var(--coral); }
+  .count { margin-top: 4px; text-align: right; font-size: 11.5px; color: var(--ink-3); }
+  .care { margin-top: 14px; padding: 14px; border-radius: 14px; background: #fde7e2; color: #7a2e22; font-size: 13.5px; line-height: 1.7; }
+  .care a { color: #7a2e22; font-weight: 700; }
+  .sheet-actions { display: flex; gap: 10px; margin-top: 18px; }
+  .sheet-actions .btn { flex: 1; }
+
+  .opened { position: relative; padding: 24px 18px 16px; isolation: isolate; transform: rotate(-.6deg); }
+  .opened::before {
+    content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 4px;
+    background: var(--grain), #fff; border: 1.8px solid var(--line); box-shadow: 3px 4px 0 rgba(60, 30, 12, .15); filter: url(#wobble);
+  }
+  .opened-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .opened-tags span { padding: 3px 11px; border-radius: 12px; font-family: var(--font-hand); font-size: 15px; }
+  .opened-text { margin: 0; font-family: var(--font-hand); font-size: 18px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .opened-when { margin-top: 12px; font-size: 12px; color: var(--ink-3); }
+  .opened.unfold { animation: unfold 520ms var(--ease-out); transform-origin: 50% 0; }
+  @keyframes unfold { from { transform: perspective(700px) rotateX(-75deg); opacity: 0; } to { transform: rotate(-.6deg); opacity: 1; } }
+  .replies { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+  .reply { padding: 10px 12px; border-radius: 10px; background: #f3eadb; font-family: var(--font-hand); font-size: 15px; line-height: 1.6; overflow-wrap: anywhere; }
+  .reply small { display: block; margin-bottom: 2px; font-family: var(--font-body); font-size: 11px; color: var(--ink-3); }
+
+  /* 접히는 쪽지 (서랍에 넣기 연출) */
+  .fly { position: fixed; z-index: 50; width: 200px; height: 140px; pointer-events: none; perspective: 800px; }
+  .fly-half {
+    position: absolute; left: 0; width: 100%; height: 50%; background: var(--grain), var(--paper);
+    border: 1.6px solid var(--line); backface-visibility: hidden;
+  }
+  .fly-top { top: 0; border-bottom: 1px dashed rgba(91, 58, 40, .35); transform-origin: 50% 100%; border-radius: 4px 4px 0 0; }
+  .fly-bottom { bottom: 0; border-top: 0; border-radius: 0 0 4px 4px; display: grid; place-items: center; font-family: var(--font-hand); font-size: 17px; color: var(--ink); padding: 0 10px; text-align: center; }
+
+  /* ===== 탭바 ===== */
+  .tabbar {
+    position: fixed; left: 50%; bottom: 0; z-index: 30; width: 100%; max-width: 430px; transform: translateX(-50%);
+    display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+    padding: 6px 6px calc(8px + env(safe-area-inset-bottom));
+    background: var(--grain), rgba(255, 250, 240, .97);
+    box-shadow: 0 -2px 0 rgba(91, 58, 40, .15);
+  }
+  .tab {
+    position: relative; min-height: 60px; border: 0; background: none; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    font-family: var(--font-hand); font-size: 14px; color: var(--ink-3);
+  }
+  .tab svg { width: 28px; height: 28px; }
+  .tab.active { color: var(--coral-dark); }
+  .tab .scribble { position: absolute; bottom: 6px; width: 30px; height: 6px; opacity: 0; }
+  .tab.active .scribble { opacity: 1; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: calc(96px + env(safe-area-inset-bottom)); z-index: 60; transform: translate(-50%, 16px) rotate(-1deg);
+    padding: 11px 18px; isolation: isolate; font-family: var(--font-hand); font-size: 16px; white-space: nowrap; color: var(--ink);
+    opacity: 0; pointer-events: none; transition: opacity 200ms, transform 240ms var(--ease-out);
+  }
+  .toast::before {
+    content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 6px; background: #fff3c4; border: 1.6px solid var(--line);
+    box-shadow: 2px 3px 0 rgba(60, 30, 12, .18); filter: url(#wobble);
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0) rotate(-1deg); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 120ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 손그림 질감 필터 (선 흔들림 / 색연필 결) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="wobble" x="-6%" y="-6%" width="112%" height="112%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="3.4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="wobble-s" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="3" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="crayon" x="-6%" y="-6%" width="112%" height="112%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.22 1.3" numOctaves="2" seed="2" result="grain"/>
+      <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.7 1.62" result="grainA"/>
+      <feComposite in="SourceGraphic" in2="grainA" operator="in" result="tex"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="7" result="n"/>
+      <feDisplacementMap in="tex" in2="n" scale="3.4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#ffe7a8" stop-opacity=".95"/>
+      <stop offset=".55" stop-color="#ffe2a0" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#ffe2a0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>
+
+<div class="app">
+
+  <!-- ===== 책상(홈) ===== -->
+  <section class="view active" id="view-desk" aria-label="책상">
+    <div class="greet">
+      <div class="greet-date" id="greetDate"></div>
+      <h1 id="greetText">오늘도 책상 앞에 앉았네요.<br>어떤 서랍을 열어볼까요?</h1>
+    </div>
+
+    <div class="scene-wrap" id="sceneWrap">
+      <svg class="scene" viewBox="0 0 390 600" role="group" aria-label="책상과 서랍 4개">
+        <!-- 스탠드 불빛 -->
+        <circle class="lamp-glow" cx="76" cy="96" r="112" fill="url(#glow)"/>
+
+        <!-- 스탠드 -->
+        <g filter="url(#crayon)">
+          <path d="M40 166 Q78 154 116 166 Q78 174 40 166Z" fill="#6f5240"/>
+          <path d="M38 74 L60 34 Q75 26 90 36 L108 74 Q73 84 38 74Z" fill="#f0b85c"/>
+        </g>
+        <g filter="url(#wobble)" fill="none" stroke="var(--line)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M40 166 Q78 154 116 166 Q78 174 40 166Z"/>
+          <path d="M78 160 Q84 128 92 104 Q86 90 74 80" stroke-width="4.4" stroke="#6f5240"/>
+          <path d="M38 74 L60 34 Q75 26 90 36 L108 74 Q73 84 38 74Z"/>
+          <path d="M56 70 L66 44" stroke-width="1.4" opacity=".45"/>
+        </g>
+
+        <!-- 쪽지 더미 + 연필 -->
+        <g filter="url(#crayon)">
+          <path d="M140 160 L208 156 L210 166 L141 169Z" fill="#fffaf0"/>
+          <path d="M144 152 L212 150 L212 159 L143 161Z" fill="#fbe9cf"/>
+          <path d="M150 140 L224 128 L226 135 L152 147Z" fill="#f2c94c"/>
+        </g>
+        <g filter="url(#wobble)" fill="none" stroke="var(--line)" stroke-width="1.8" stroke-linejoin="round">
+          <path d="M140 160 L208 156 L210 166 L141 169Z"/>
+          <path d="M144 152 L212 150 L212 159 L143 161Z"/>
+          <path d="M150 140 L224 128 L226 135 L152 147Z"/>
+          <path d="M224 128 L236 129 L226 135" fill="#f3d6b6"/>
+        </g>
+
+        <!-- 머그컵 + 김 -->
+        <g class="steam" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round">
+          <path d="M262 122 q-8 -10 0 -20 q8 -10 0 -22"/>
+          <path d="M278 122 q-8 -10 0 -20 q8 -10 0 -22"/>
+        </g>
+        <g filter="url(#crayon)">
+          <path d="M248 128 L296 128 L292 164 Q272 172 252 164Z" fill="#f7efe3"/>
+          <path d="M253 140 L291 140 L290 150 L254 150Z" fill="var(--coral)" opacity=".75"/>
+        </g>
+        <g filter="url(#wobble)" fill="none" stroke="var(--line)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M248 128 L296 128 L292 164 Q272 172 252 164Z"/>
+          <path d="M295 136 Q314 138 310 150 Q306 160 292 156"/>
+        </g>
+
+        <!-- 화분 -->
+        <g class="plant-leaves">
+          <g filter="url(#crayon)" fill="#8fae84">
+            <path d="M336 138 Q314 120 318 96 Q338 108 336 138Z"/>
+            <path d="M338 138 Q346 106 368 94 Q366 124 338 138Z"/>
+            <path d="M337 138 Q330 100 342 80 Q352 104 337 138Z" fill="#a6c39a"/>
+          </g>
+          <g filter="url(#wobble)" fill="none" stroke="var(--line)" stroke-width="1.8" stroke-linecap="round">
+            <path d="M336 138 Q314 120 318 96 Q338 108 336 138Z"/>
+            <path d="M338 138 Q346 106 368 94 Q366 124 338 138Z"/>
+            <path d="M337 138 Q330 100 342 80 Q352 104 337 138Z"/>
+          </g>
+        </g>
+        <g filter="url(#crayon)"><path d="M316 138 L360 138 L354 168 L322 168Z" fill="#d08a62"/></g>
+        <g filter="url(#wobble)" fill="none" stroke="var(--line)" stroke-width="2.2" stroke-linejoin="round"><path d="M316 138 L360 138 L354 168 L322 168Z"/><path d="M314 138 L362 138"/></g>
+
+        <!-- 책상 상판 -->
+        <g filter="url(#crayon)"><path d="M8 170 Q195 165 382 170 L380 196 Q195 200 10 196Z" fill="#cf9265"/></g>
+        <g filter="url(#wobble)" fill="none" stroke="var(--line)" stroke-width="2.4" stroke-linejoin="round">
+          <path d="M8 170 Q195 165 382 170 L380 196 Q195 200 10 196Z"/>
+          <path d="M40 180 Q120 178 190 181" stroke-width="1.2" opacity=".35"/>
+          <path d="M230 186 Q300 184 350 186" stroke-width="1.2" opacity=".35"/>
+        </g>
+
+        <!-- 서랍장 몸통 -->
+        <g filter="url(#crayon)"><path d="M26 196 L364 196 L362 590 Q195 596 28 590Z" fill="var(--wood)"/></g>
+        <g filter="url(#wobble)" fill="none" stroke="var(--line)" stroke-width="2.4" stroke-linejoin="round"><path d="M26 196 L364 196 L362 590 Q195 596 28 590Z"/></g>
+
+        <g id="drawers"></g>
+      </svg>
+    </div>
+    <p class="desk-hint">손잡이를 눌러 서랍을 열어보세요</p>
+  </section>
+
+  <!-- ===== 마음일기 서랍 ===== -->
+  <section class="view" id="view-diary" aria-label="마음일기 서랍">
+    <div class="sub-head">
+      <button class="back" type="button" data-go="desk" aria-label="책상으로 돌아가기">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" filter="url(#wobble-s)"><path d="M16 5 Q9 11 8 13 Q10 16 16 21"/><path d="M8.5 13 L21 13.5"/></svg>
+      </button>
+      <h1>마음일기 서랍</h1>
+    </div>
+
+    <div class="box" id="box"><div class="notes" id="notes"></div></div>
+
+    <div class="actions">
+      <button class="btn btn-coral" type="button" id="btnWrite">쪽지 넣기</button>
+      <button class="btn btn-paper" type="button" id="btnPast">그때의 나 꺼내기</button>
+    </div>
+
+    <div class="week">
+      <h2>이번 주 내 서랍엔</h2>
+      <div id="weekBody"></div>
+    </div>
+  </section>
+
+  <nav class="tabbar" aria-label="주요 메뉴">
+    <button class="tab active" type="button" data-go="desk">
+      <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" filter="url(#wobble-s)"><path d="M3 11 L25 11"/><path d="M5 11 L5 24"/><path d="M23 11 L23 24"/><path d="M14 11 L14 20 L23 20"/><path d="M17 15.5 L20 15.5"/><path d="M8 7 Q9 3 12 4 L11 11"/></svg>
+      책상<svg class="scribble" viewBox="0 0 30 6"><path d="M2 4 Q8 1 14 3.5 T28 2.5" fill="none" stroke="var(--coral)" stroke-width="2.6" stroke-linecap="round"/></svg>
+    </button>
+    <button class="tab" type="button" data-drawer="card">
+      <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" filter="url(#wobble-s)"><path d="M7 4 L20 3 Q22 3 22 5 L23 23 Q23 25 21 25 L8 25.5 Q6 25.5 6 23.5 L5 6 Q5 4 7 4Z" transform="rotate(-5 14 14)"/><path d="M14 18 Q9 14 10.5 11.5 Q12.5 9.5 14 12 Q15.5 9.5 17.5 11.5 Q19 14 14 18Z"/></svg>
+      카드<svg class="scribble" viewBox="0 0 30 6"><path d="M2 4 Q8 1 14 3.5 T28 2.5" fill="none" stroke="var(--coral)" stroke-width="2.6" stroke-linecap="round"/></svg>
+    </button>
+    <button class="tab" type="button" data-go="diary">
+      <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" filter="url(#wobble-s)"><path d="M7 3.5 L22 3 L22.5 25 L7 25.5Z"/><path d="M10.5 3.5 L10.5 25"/><path d="M14 9 L19 9"/><path d="M14 13 L19 13"/><path d="M4.5 8 L8 8"/><path d="M4.5 14 L8 14"/><path d="M4.5 20 L8 20"/></svg>
+      일기<svg class="scribble" viewBox="0 0 30 6"><path d="M2 4 Q8 1 14 3.5 T28 2.5" fill="none" stroke="var(--coral)" stroke-width="2.6" stroke-linecap="round"/></svg>
+    </button>
+    <button class="tab" type="button" data-drawer="check">
+      <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" filter="url(#wobble-s)"><path d="M5 5 L22 4.5 L23 23 L5.5 23.5Z"/><path d="M9 14 L12.5 17.5 Q16 11 21 8"/></svg>
+      체크<svg class="scribble" viewBox="0 0 30 6"><path d="M2 4 Q8 1 14 3.5 T28 2.5" fill="none" stroke="var(--coral)" stroke-width="2.6" stroke-linecap="round"/></svg>
+    </button>
+    <button class="tab" type="button" data-drawer="connect">
+      <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" filter="url(#wobble-s)"><path d="M4 6 Q4 4 6 4 L18 4 Q20 4 20 6 L20 13 Q20 15 18 15 L10 15 L6 19 L6.5 15 Q4 15 4 13Z"/><path d="M22 10 L23 10 Q25 10 25 12 L25 19 Q25 21 23 21 L22 21 L22.5 24.5 L18.5 21 L13 21 Q11 21 11 19 L11 18"/></svg>
+      연결<svg class="scribble" viewBox="0 0 30 6"><path d="M2 4 Q8 1 14 3.5 T28 2.5" fill="none" stroke="var(--coral)" stroke-width="2.6" stroke-linecap="round"/></svg>
+    </button>
+  </nav>
+</div>
+
+<!-- 쪽지 쓰기 -->
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheetWrite" role="dialog" aria-modal="true" aria-labelledby="writeTitle">
+  <div class="sheet-tape"></div>
+  <h3 id="writeTitle">지금 마음에 이름 붙이기</h3>
+  <p class="sub">딱 맞는 말이 없어도 괜찮아요. 가장 가까운 스티커를 골라보세요. (최대 3개)</p>
+  <div id="fams"></div>
+  <label class="field" for="noteText">무슨 일이 있었나요? <span>(선택)</span></label>
+  <div class="lined"><textarea id="noteText" maxlength="300" placeholder="누구에게도 보여주지 않는 쪽지예요."></textarea></div>
+  <div class="count" id="noteCount">0/300</div>
+  <div class="care" id="careWrite" hidden></div>
+  <div class="sheet-actions">
+    <button class="btn btn-paper" type="button" data-close>나중에</button>
+    <button class="btn btn-coral" type="button" id="btnSave" disabled>접어서 넣기</button>
+  </div>
+</div>
+
+<!-- 꺼내보기 -->
+<div class="sheet" id="sheetOpen" role="dialog" aria-modal="true" aria-labelledby="openTitle">
+  <div class="sheet-tape"></div>
+  <h3 id="openTitle">꺼내본 쪽지</h3>
+  <p class="sub" id="openSub"></p>
+  <div class="opened" id="opened">
+    <div class="opened-tags" id="openTags"></div>
+    <p class="opened-text" id="openText"></p>
+    <div class="opened-when" id="openWhen"></div>
+  </div>
+  <div class="replies" id="openReplies"></div>
+  <label class="field" for="replyText">지금의 내가, 그때의 나에게</label>
+  <div class="lined"><textarea id="replyText" maxlength="200" placeholder="다시 보니 어떤가요?" style="min-height:96px"></textarea></div>
+  <div class="sheet-actions">
+    <button class="btn btn-paper" type="button" data-close>다시 넣어두기</button>
+    <button class="btn btn-coral" type="button" id="btnReply" disabled>한마디 붙이기</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  const NS = 'http://www.w3.org/2000/svg';
+  const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ===== 감정 스티커 =====
+  const FAMILIES = [
+    { key: 'joy',   name: '기쁨', color: 'var(--em-joy)',   words: ['기뻐요', '뿌듯해요', '설레요', '고마워요'] },
+    { key: 'calm',  name: '평온', color: 'var(--em-calm)',  words: ['편안해요', '담담해요', '홀가분해요'] },
+    { key: 'sad',   name: '슬픔', color: 'var(--em-sad)',   words: ['서운해요', '슬퍼요', '그리워요', '외로워요'] },
+    { key: 'anx',   name: '불안', color: 'var(--em-anx)',   words: ['불안해요', '막막해요', '초조해요'] },
+    { key: 'angry', name: '화',   color: 'var(--em-angry)', words: ['짜증나요', '억울해요', '화나요'] },
+    { key: 'tired', name: '지침', color: 'var(--em-tired)', words: ['지쳐요', '무기력해요', '귀찮아요'] }
+  ];
+  const familyOf = w => FAMILIES.find(f => f.words.includes(w)) || FAMILIES[5];
+
+  const CARE_WORDS = ['죽고 싶', '자살', '사라지고 싶', '없어지고 싶', '자해', '살기 싫'];
+  const CARE_HTML = '혼자 감당하기 힘든 마음이 느껴져요. 지금 바로 이야기할 수 있는 곳이 있어요.<br>' +
+    '<a href="tel:1388">청소년전화 1388</a> · <a href="tel:109">자살예방상담 109</a> (24시간)';
+
+  // ===== 저장소 (이 기기에만) =====
+  const KEY = 'mdr_notes';
+  const load = () => { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; } };
+  const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(notes)); } catch (e) {} };
+  let notes = load();
+
+  const DAY = 86400000;
+  const fmtDate = ts => new Intl.DateTimeFormat('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' }).format(new Date(ts));
+  const fmtShort = ts => { const d = new Date(ts); return `${d.getMonth() + 1}.${d.getDate()}`; };
+  function ago(ts) {
+    const d = Math.floor((Date.now() - ts) / DAY);
+    if (d <= 0) return '오늘';
+    if (d === 1) return '어제';
+    if (d < 7) return `${d}일 전`;
+    if (d < 30) return `${Math.floor(d / 7)}주 전`;
+    return `${Math.floor(d / 30)}달 전`;
+  }
+
+  let toastTimer;
+  function toast(msg) {
+    const t = $('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+  }
+
+  // ===== 서랍 4칸 그리기 =====
+  const DRAWERS = [
+    { key: 'card',    title: '마음카드', sub: '오늘 나에게 건네는 한 장', tone: '#dca57b', tape: 'rgba(217,115,90,.55)',
+      doodle: 'M0 3 Q0 0 3 0 L15 0 Q18 0 18 3 L18 22 Q18 25 15 25 L3 25 Q0 25 0 22Z M9 17 Q4 13 5.5 10 Q7.5 8 9 10.5 Q10.5 8 12.5 10 Q14 13 9 17Z' },
+    { key: 'diary',   title: '마음일기', sub: '내 이야기를 넣어두는 곳', tone: '#d49a70', tape: 'rgba(143,174,132,.65)',
+      doodle: 'M0 0 L17 -1 L18 24 L1 25Z M4.5 0 L4.5 24.5 M8 7 L14 7 M8 11 L14 11 M8 15 L12 15' },
+    { key: 'check',   title: '마음체크', sub: '3분이면 되는 마음 점검', tone: '#dba47a', tape: 'rgba(185,208,232,.85)',
+      doodle: 'M0 1 L19 0 L20 20 L1 21Z M4 11 L8 15 Q12 8 17 4' },
+    { key: 'connect', title: '마음연결', sub: '이야기를 들어줄 사람에게', tone: '#d39b72', tape: 'rgba(247,215,124,.8)',
+      doodle: 'M0 3 Q0 0 3 0 L15 0 Q18 0 18 3 L18 10 Q18 13 15 13 L7 13 L3 17 L3.5 13 Q0 13 0 10Z M12 17 L18 17 L22 21 L21.5 17 Q24 17 24 14 L24 8' }
+  ];
+
+  function el(tag, attrs, parent) {
+    const n = document.createElementNS(NS, tag);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+
+  function buildDrawers() {
+    const root = $('drawers');
+    DRAWERS.forEach((d, i) => {
+      const y = 210 + i * 94;
+      const g = el('g', { class: 'dr', 'data-drawer': d.key, role: 'button', tabindex: '0', 'aria-label': `${d.title} 서랍 열기` }, root);
+
+      // 서랍 안쪽 (당기면 드러남)
+      const inside = el('g', { class: 'inside' }, g);
+      el('path', { d: `M44 ${y - 2} L346 ${y - 2} L340 ${y + 32} L50 ${y + 32}Z`, fill: '#5e3b27', filter: 'url(#crayon)' }, inside);
+      el('path', { d: `M86 ${y + 6} L132 ${y + 2} L134 ${y + 30} L88 ${y + 30}Z`, fill: '#fffaf0', filter: 'url(#crayon)' }, inside);
+      el('path', { d: `M150 ${y + 4} L200 ${y + 7} L198 ${y + 30} L150 ${y + 30}Z`, fill: '#fbe9cf', filter: 'url(#crayon)' }, inside);
+      el('path', { d: `M222 ${y + 8} L262 ${y + 3} L264 ${y + 30} L224 ${y + 30}Z`, fill: '#fffaf0', filter: 'url(#crayon)' }, inside);
+
+      const front = el('g', { class: 'front' }, g);
+      const fx = 40, fw = 310, fh = 82;
+      const frontPath = `M${fx} ${y + 3} Q${fx} ${y} ${fx + 6} ${y} L${fx + fw - 6} ${y + 1} Q${fx + fw} ${y + 1} ${fx + fw} ${y + 7} L${fx + fw - 1} ${y + fh - 6} Q${fx + fw - 1} ${y + fh} ${fx + fw - 7} ${y + fh} L${fx + 6} ${y + fh + 1} Q${fx} ${y + fh + 1} ${fx} ${y + fh - 5}Z`;
+      el('path', { d: frontPath, fill: d.tone, filter: 'url(#crayon)' }, front);
+      el('path', { d: `M${fx + 8} ${y + fh - 8} L${fx + fw - 8} ${y + fh - 9}`, stroke: 'rgba(91,58,40,.28)', 'stroke-width': 3, 'stroke-linecap': 'round', fill: 'none', filter: 'url(#wobble)' }, front);
+      el('path', { d: frontPath, fill: 'none', stroke: 'var(--line)', 'stroke-width': 2.4, 'stroke-linejoin': 'round', filter: 'url(#wobble)' }, front);
+      el('path', { d: frontPath, fill: 'none', stroke: 'var(--coral)', 'stroke-width': 4, class: 'focus-ring' }, front);
+
+      // 이름표 + 마스킹테이프
+      const lx = 58, ly = y + 13, lw = 196, lh = 56;
+      const label = el('g', { transform: `rotate(${i % 2 ? 0.8 : -1} ${lx + lw / 2} ${ly + lh / 2})` }, front);
+      el('path', { d: `M${lx} ${ly} L${lx + lw} ${ly + 1} L${lx + lw - 1} ${ly + lh} L${lx + 1} ${ly + lh - 1}Z`, fill: '#fffaf0', filter: 'url(#crayon)' }, label);
+      el('path', { d: `M${lx} ${ly} L${lx + lw} ${ly + 1} L${lx + lw - 1} ${ly + lh} L${lx + 1} ${ly + lh - 1}Z`, fill: 'none', stroke: 'var(--line)', 'stroke-width': 1.8, filter: 'url(#wobble)' }, label);
+      el('rect', { x: lx - 10, y: ly - 7, width: 40, height: 14, fill: d.tape, transform: `rotate(-14 ${lx + 10} ${ly})` }, label);
+      const t1 = el('text', { x: lx + 16, y: ly + 27, 'font-family': 'Jua', 'font-size': 21, fill: 'var(--ink)' }, label);
+      t1.textContent = d.title;
+      const t2 = el('text', { x: lx + 16, y: ly + 46, 'font-family': 'Noto Sans KR', 'font-size': 11.5, fill: 'var(--ink-2)' }, label);
+      t2.textContent = d.sub;
+      el('path', { d: d.doodle, fill: 'none', stroke: 'var(--line)', 'stroke-width': 1.8, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', transform: `translate(${lx + lw - 36} ${ly + 8}) scale(.9)`, filter: 'url(#wobble-s)' }, label);
+
+      // 손잡이
+      const hx = 286, hy = y + 34;
+      el('path', { d: `M${hx} ${hy + 6} Q${hx} ${hy} ${hx + 7} ${hy} L${hx + 38} ${hy + 1} Q${hx + 44} ${hy + 1} ${hx + 44} ${hy + 7} Q${hx + 44} ${hy + 13} ${hx + 38} ${hy + 13} L${hx + 7} ${hy + 13} Q${hx} ${hy + 13} ${hx} ${hy + 6}Z`, fill: '#6f5240', filter: 'url(#crayon)' }, front);
+      el('path', { d: `M${hx} ${hy + 6} Q${hx} ${hy} ${hx + 7} ${hy} L${hx + 38} ${hy + 1} Q${hx + 44} ${hy + 1} ${hx + 44} ${hy + 7} Q${hx + 44} ${hy + 13} ${hx + 38} ${hy + 13} L${hx + 7} ${hy + 13} Q${hx} ${hy + 13} ${hx} ${hy + 6}Z`, fill: 'none', stroke: 'var(--line)', 'stroke-width': 2, filter: 'url(#wobble)' }, front);
+      el('path', { d: `M${hx + 8} ${hy + 4} L${hx + 34} ${hy + 4}`, stroke: 'rgba(255,255,255,.3)', 'stroke-width': 2, 'stroke-linecap': 'round' }, front);
+
+      if (d.key === 'diary') {
+        const badge = el('g', { id: 'diaryBadge', style: 'display:none' }, front);
+        el('circle', { cx: 336, cy: y + 12, r: 13, fill: 'var(--coral)', filter: 'url(#crayon)' }, badge);
+        el('circle', { cx: 336, cy: y + 12, r: 13, fill: 'none', stroke: 'var(--line)', 'stroke-width': 1.8, filter: 'url(#wobble-s)' }, badge);
+        const bt = el('text', { id: 'diaryBadgeText', x: 336, y: y + 17, 'text-anchor': 'middle', 'font-family': 'Jua', 'font-size': 14, fill: '#fff' }, badge);
+        bt.textContent = '0';
+      }
+
+      g.addEventListener('click', () => openDrawer(d.key, g));
+      g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDrawer(d.key, g); } });
+    });
+  }
+
+  // ===== 화면 전환 =====
+  function show(name) {
+    document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + name));
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.go === name));
+    window.scrollTo(0, 0);
+    if (name === 'diary') {
+      const box = $('box');
+      box.classList.remove('rise'); void box.offsetWidth; box.classList.add('rise');
+    } else {
+      $('sceneWrap').getAnimations().forEach(a => a.cancel());
+    }
+  }
+  const route = () => show(location.hash === '#diary' ? 'diary' : 'desk');
+  window.addEventListener('hashchange', route);
+
+  let opening = false;
+  function openDrawer(key, g) {
+    if (key !== 'diary') { toast('이 서랍은 다음 단계에서 열려요'); return; }
+    if (location.hash === '#diary' || opening) return;
+    if (!g || reduceMotion()) { location.hash = 'diary'; return; }
+
+    // 서랍이 앞으로 당겨지고 → 그 서랍 쪽으로 화면이 다가가며 전환
+    opening = true;
+    g.parentNode.appendChild(g);
+    g.classList.add('opening');
+    const wrap = $('sceneWrap');
+    const r = g.getBoundingClientRect(), wr = wrap.getBoundingClientRect();
+    wrap.style.transformOrigin = `${((r.left + r.width / 2 - wr.left) / wr.width) * 100}% ${((r.top + r.height / 2 - wr.top) / wr.height) * 100}%`;
+    setTimeout(() => {
+      wrap.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(2.4)', opacity: 0 }], { duration: 380, easing: 'cubic-bezier(.55,0,.75,.2)', fill: 'forwards' })
+        .finished.then(() => {
+          g.classList.remove('opening');
+          opening = false;
+          location.hash = 'diary';
+        });
+    }, 460);
+  }
+
+  document.addEventListener('click', e => {
+    const tab = e.target.closest('.tab, .back');
+    if (!tab) return;
+    if (tab.dataset.drawer) { openDrawer(tab.dataset.drawer); return; }
+    if (tab.dataset.go === 'desk') { if (location.hash) location.hash = ''; }
+    else if (tab.dataset.go === 'diary') location.hash = 'diary';
+  });
+
+  // ===== 책상 상태 =====
+  function renderDesk() {
+    const now = new Date();
+    $('greetDate').textContent = fmtDate(now.getTime());
+    const h = now.getHours();
+    const todayStart = new Date(); todayStart.setHours(0, 0, 0, 0);
+    const wrote = notes.some(n => n.ts >= todayStart.getTime());
+    const hello = h < 6 ? '늦은 밤이네요.' : h < 11 ? '좋은 아침이에요.' : h < 18 ? '오늘도 책상 앞에 앉았네요.' : '하루 끝, 수고 많았어요.';
+    $('greetText').innerHTML = wrote ? '오늘의 쪽지가 서랍에 있어요.<br>다른 서랍도 열어볼까요?' : `${hello}<br>어떤 서랍을 열어볼까요?`;
+    const badge = $('diaryBadge');
+    if (badge) {
+      badge.style.display = notes.length ? '' : 'none';
+      $('diaryBadgeText').textContent = notes.length > 99 ? '99+' : notes.length;
+    }
+  }
+
+  // ===== 서랍 속 쪽지 =====
+  function renderNotes(landingId) {
+    const wrap = $('notes');
+    wrap.textContent = '';
+    if (!notes.length) {
+      const e = document.createElement('div');
+      e.className = 'empty';
+      e.innerHTML = '아직 서랍이 비어 있어요.<br>오늘 마음을 쪽지로 넣어볼까요?';
+      wrap.appendChild(e);
+    }
+    notes.slice().sort((a, b) => b.ts - a.ts).forEach((n, i) => {
+      const fam = familyOf(n.emotions[0]);
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'note' + (n.id === landingId ? ' landing' : '');
+      b.style.transform = `rotate(${((i * 37) % 9) - 4}deg)`;
+      const tape = document.createElement('span');
+      tape.className = 'note-tape';
+      tape.style.background = fam.color;
+      const emo = document.createElement('span');
+      emo.className = 'note-emo';
+      emo.textContent = n.emotions.join(' · ');
+      const date = document.createElement('span');
+      date.className = 'note-date';
+      date.textContent = fmtShort(n.ts) + (n.replies && n.replies.length ? ` · 한마디 ${n.replies.length}` : '');
+      b.append(tape, emo, date);
+      b.setAttribute('aria-label', `${fmtDate(n.ts)} 쪽지, ${n.emotions.join(', ')}`);
+      b.addEventListener('click', () => openNote(n.id));
+      wrap.appendChild(b);
+    });
+    $('btnPast').disabled = notes.length === 0;
+  }
+
+  // 색연필로 칠한 듯한 가로 막대
+  function crayonBar(ratio, color) {
+    // 납작한 선에 필터를 걸면 필터 영역이 선 높이만큼만 잡혀 잘리므로, 높이가 있는 도형으로 칠함
+    const w = Math.max(14, Math.round(ratio * 204));
+    return `<svg viewBox="0 0 210 16" preserveAspectRatio="none" aria-hidden="true">
+      <rect x="2" y="2" width="${w}" height="12" rx="6" fill="${color}" filter="url(#crayon)"/>
+      <rect x="2" y="2" width="${w}" height="12" rx="6" fill="none" stroke="var(--line)" stroke-width="1.4" opacity=".55" filter="url(#wobble-s)"/>
+    </svg>`;
+  }
+
+  function renderWeek() {
+    const body = $('weekBody');
+    const recent = notes.filter(n => Date.now() - n.ts < 7 * DAY);
+    if (!recent.length) { body.innerHTML = '<div class="week-empty">이번 주에 넣은 쪽지가 아직 없어요.</div>'; return; }
+    const counts = {};
+    recent.forEach(n => n.emotions.forEach(w => { const k = familyOf(w).key; counts[k] = (counts[k] || 0) + 1; }));
+    const max = Math.max(...Object.values(counts));
+    body.innerHTML = FAMILIES.filter(f => counts[f.key]).sort((a, b) => counts[b.key] - counts[a.key]).map(f =>
+      `<div class="week-row"><span class="nm">${f.name}</span>${crayonBar(counts[f.key] / max, f.color)}<span class="ct">${counts[f.key]}</span></div>`
+    ).join('');
+  }
+
+  // ===== 시트 =====
+  const scrim = $('scrim');
+  let openSheet = null;
+  function sheetOpen(s) { openSheet = s; scrim.classList.add('show'); s.classList.add('show'); }
+  function sheetClose() { if (!openSheet) return; openSheet.classList.remove('show'); scrim.classList.remove('show'); openSheet = null; }
+  scrim.addEventListener('click', sheetClose);
+  document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', sheetClose));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') sheetClose(); });
+
+  // ===== 쪽지 쓰기 =====
+  let picked = [];
+  const famsEl = $('fams');
+  FAMILIES.forEach(f => {
+    const g = document.createElement('div');
+    g.className = 'fam';
+    const nm = document.createElement('div');
+    nm.className = 'fam-name';
+    nm.textContent = f.name;
+    const st = document.createElement('div');
+    st.className = 'stickers';
+    f.words.forEach(w => {
+      const c = document.createElement('button');
+      c.type = 'button';
+      c.className = 'sticker';
+      c.textContent = w;
+      c.style.background = f.color;
+      c.setAttribute('aria-pressed', 'false');
+      c.addEventListener('click', () => {
+        if (picked.includes(w)) picked = picked.filter(x => x !== w);
+        else if (picked.length < 3) picked.push(w);
+        else { toast('스티커는 3개까지 붙일 수 있어요'); return; }
+        c.setAttribute('aria-pressed', picked.includes(w) ? 'true' : 'false');
+        $('btnSave').disabled = !picked.length;
+      });
+      st.appendChild(c);
+    });
+    g.append(nm, st);
+    famsEl.appendChild(g);
+  });
+
+  const noteText = $('noteText');
+  noteText.addEventListener('input', () => {
+    $('noteCount').textContent = `${noteText.value.length}/300`;
+    const hit = CARE_WORDS.some(w => noteText.value.includes(w));
+    $('careWrite').hidden = !hit;
+    if (hit) $('careWrite').innerHTML = CARE_HTML;
+  });
+
+  $('btnWrite').addEventListener('click', () => {
+    picked = [];
+    famsEl.querySelectorAll('.sticker').forEach(c => c.setAttribute('aria-pressed', 'false'));
+    noteText.value = '';
+    $('noteCount').textContent = '0/300';
+    $('careWrite').hidden = true;
+    $('btnSave').disabled = true;
+    sheetOpen($('sheetWrite'));
+  });
+
+  // 쪽지가 반으로 접혀 → 서랍 안으로 쏙
+  function foldIntoDrawer(label) {
+    if (reduceMotion()) return Promise.resolve();
+    const fly = document.createElement('div');
+    fly.className = 'fly';
+    fly.innerHTML = '<div class="fly-half fly-top"></div><div class="fly-half fly-bottom"></div>';
+    fly.querySelector('.fly-bottom').textContent = label;
+    document.body.appendChild(fly);
+    const vw = window.innerWidth, vh = window.innerHeight;
+    fly.style.left = (vw / 2 - 100) + 'px';
+    fly.style.top = (vh * 0.42 - 70) + 'px';
+    const box = $('box').getBoundingClientRect();
+    const dx = (box.left + box.width / 2) - vw / 2;
+    const dy = (box.top + box.height / 2) - vh * 0.42;
+    return fly.querySelector('.fly-top').animate(
+      [{ transform: 'rotateX(0deg)' }, { transform: 'rotateX(-178deg)' }],
+      { duration: 420, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' }
+    ).finished.then(() => fly.animate(
+      [{ transform: 'translate(0,0) scale(1) rotate(0deg)', opacity: 1 },
+       { transform: `translate(${dx * .5}px, ${dy * .5 - 40}px) scale(.7) rotate(-8deg)`, opacity: 1, offset: .5 },
+       { transform: `translate(${dx}px, ${dy}px) scale(.32) rotate(6deg)`, opacity: 0 }],
+      { duration: 560, easing: 'cubic-bezier(.55,0,.4,1)', fill: 'forwards' }
+    ).finished).then(() => fly.remove());
+  }
+
+  $('btnSave').addEventListener('click', () => {
+    if (!picked.length) return;
+    const n = { id: 'n' + Date.now(), ts: Date.now(), emotions: picked.slice(), text: noteText.value.trim(), replies: [] };
+    sheetClose();
+    foldIntoDrawer(n.emotions.join(' · ')).then(() => {
+      notes.push(n);
+      persist();
+      renderNotes(n.id);
+      renderWeek();
+      renderDesk();
+      toast('서랍에 넣어뒀어요');
+    });
+  });
+
+  // ===== 꺼내보기 =====
+  let openedId = null;
+  const replyText = $('replyText');
+  replyText.addEventListener('input', () => { $('btnReply').disabled = !replyText.value.trim(); });
+
+  function openNote(id, subText) {
+    const n = notes.find(x => x.id === id);
+    if (!n) return;
+    openedId = id;
+    $('openSub').textContent = subText || `${ago(n.ts)}에 넣어둔 쪽지예요.`;
+    const tags = $('openTags');
+    tags.textContent = '';
+    n.emotions.forEach(w => {
+      const s = document.createElement('span');
+      s.textContent = w;
+      s.style.background = familyOf(w).color;
+      tags.appendChild(s);
+    });
+    $('openText').textContent = n.text || '(글 없이 마음만 넣어둔 쪽지예요)';
+    $('openWhen').textContent = fmtDate(n.ts);
+    const rep = $('openReplies');
+    rep.textContent = '';
+    (n.replies || []).forEach(r => {
+      const div = document.createElement('div');
+      div.className = 'reply';
+      const sm = document.createElement('small');
+      sm.textContent = `${fmtDate(r.ts)}의 내가`;
+      div.append(sm, document.createTextNode(r.text));
+      rep.appendChild(div);
+    });
+    replyText.value = '';
+    $('btnReply').disabled = true;
+    const op = $('opened');
+    op.classList.remove('unfold'); void op.offsetWidth; op.classList.add('unfold');
+    sheetOpen($('sheetOpen'));
+  }
+
+  $('btnReply').addEventListener('click', () => {
+    const n = notes.find(x => x.id === openedId);
+    const text = replyText.value.trim();
+    if (!n || !text) return;
+    (n.replies = n.replies || []).push({ ts: Date.now(), text });
+    persist();
+    sheetClose();
+    renderNotes();
+    toast('그때의 나에게 한마디를 붙였어요');
+  });
+
+  $('btnPast').addEventListener('click', () => {
+    if (!notes.length) return;
+    const old = notes.filter(n => Date.now() - n.ts >= 7 * DAY);
+    const pick = old.length ? old[Math.floor(Math.random() * old.length)] : notes.slice().sort((a, b) => a.ts - b.ts)[0];
+    openNote(pick.id, `${ago(pick.ts)}의 내가 넣어둔 쪽지예요. 지금의 나는 어떤가요?`);
+  });
+
+  buildDrawers();
+  renderDesk();
+  renderNotes();
+  renderWeek();
+  route();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>마음서랍 - 소개 영상</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root { --ink: #3b2c22; --coral: #d9735a; --paper: #fffaf0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; overflow-x: clip; }
+  body {
+    min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+    padding: 16px; background: #2b2420; font-family: "Noto Sans KR", sans-serif; color: #f6ead9;
+  }
+  canvas#out { display: block; height: min(calc(100dvh - 110px), 1280px); max-width: 100%; aspect-ratio: 9 / 16; border-radius: 18px; background: #e9c7a5; }
+  .controls { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  button {
+    min-height: 46px; padding: 0 20px; border: 0; border-radius: 23px; cursor: pointer; white-space: nowrap;
+    font-family: "Jua", sans-serif; font-size: 17px; color: var(--ink); background: var(--paper);
+    transition: transform 140ms cubic-bezier(.22,1,.36,1), opacity 140ms;
+  }
+  button:active { transform: scale(.97); }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  button.primary { background: var(--coral); color: #fff; }
+  button:focus-visible { outline: 3px solid rgba(217,115,90,.6); outline-offset: 3px; }
+  .status { min-height: 20px; font-size: 13px; color: #cdbba6; text-align: center; }
+</style>
+<script>
+  // 파일을 직접 열면(file://) 브라우저 보안 때문에 3D 장면 파일을 못 불러와 화면이 비어 보여서 안내를 띄움
+  if (location.protocol === "file:") document.addEventListener("DOMContentLoaded", function () {
+    var name = location.pathname.split("/").pop();
+    var d = document.createElement("div");
+    d.setAttribute("role", "alert");
+    d.style.cssText = "position:fixed;inset:0;z-index:999;display:grid;place-items:center;padding:24px;background:#2b2420;color:#f6ead9;font:500 15px/1.7 sans-serif;text-align:center";
+    d.innerHTML = "이 화면은 파일을 직접 열면 동작하지 않아요.<br>로컬 서버 주소로 열어주세요:<br><b style=\"color:#fff\">http://localhost:8723/" + name + "</b>";
+    document.body.appendChild(d);
+  });
+</script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<canvas id="out" aria-label="마음서랍 소개 영상"></canvas>
+<div class="controls">
+  <button type="button" id="btnPlay">처음부터 보기</button>
+  <button type="button" class="primary" id="btnRec">영상 파일로 저장</button>
+</div>
+<div class="status" id="status" role="status"></div>
+
+<script type="module">
+import * as THREE from 'three';
+import { createClayWorld, createClayRenderer } from './js/clay-scene.js';
+import { createIntro, INTRO_DUR, CAPTIONS, ENDING, captionState, seg, eout } from './js/intro-timeline.js';
+
+const W = 720, H = 1280, DUR = INTRO_DUR;
+const out = document.getElementById('out');
+out.width = W; out.height = H;
+const ctx = out.getContext('2d');
+
+// ===== 렌더러 / 씬 (공용 클레이 세계 + 공용 타임라인) =====
+const renderer = createClayRenderer();
+renderer.setPixelRatio(1);
+renderer.setSize(W, H, false);
+const world = createClayWorld();
+const { scene } = world;
+const camera = new THREE.PerspectiveCamera(32, W / H, 0.1, 200);
+const intro = createIntro(world, camera);
+const update = t => intro.update(t, W / H);
+
+// ===== 2D 합성 (배경 · 자막 · 엔딩) =====
+function bg() {
+  const g = ctx.createRadialGradient(W / 2, H * 0.48, 80, W / 2, H * 0.5, H * 0.75);
+  g.addColorStop(0, '#f6e2cb');
+  g.addColorStop(1, '#d7ab83');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+}
+function textLine(str, x, y, size, color, alpha, font = 'Jua') {
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.font = `${size}px ${font}`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.shadowColor = 'rgba(90, 50, 25, .28)';
+  ctx.shadowBlur = 14;
+  ctx.shadowOffsetY = 3;
+  ctx.fillStyle = color;
+  ctx.fillText(str, x, y);
+  ctx.restore();
+}
+function compose(t) {
+  bg();
+  ctx.save();
+  ctx.globalAlpha = eout(seg(t, 0, 0.9));
+  ctx.drawImage(renderer.domElement, 0, 0, W, H);
+  ctx.restore();
+
+  CAPTIONS.forEach(c => {
+    const { alpha, rise } = captionState(t, c);
+    if (alpha <= 0) return;
+    c.text.forEach((line, i) => textLine(line, W / 2, 150 + i * 70 + rise, 56, '#ffffff', alpha));
+  });
+
+  const e1 = eout(seg(t, ENDING.logo, ENDING.logo + 0.8));
+  const e2 = eout(seg(t, ENDING.sub, ENDING.sub + 0.7));
+  const e3 = eout(seg(t, ENDING.credit, ENDING.credit + 0.7));
+  if (e1 > 0) {
+    textLine('마음서랍', W / 2, 250 + (1 - e1) * 24, 118, '#fffaf0', e1);
+    textLine('내 마음을 넣어두고, 언제든 꺼내보는 곳', W / 2, 345 + (1 - e2) * 16, 32, '#7a4a30', e2);
+    textLine('부천시청소년상담복지센터', W / 2, H - 70, 24, '#7a4a30', e3 * 0.9, '"Noto Sans KR"');
+  }
+}
+
+// ===== 재생 / 녹화 =====
+let playing = false, startAt = 0, t = 0, recorder = null;
+const status = document.getElementById('status');
+const btnPlay = document.getElementById('btnPlay');
+const btnRec = document.getElementById('btnRec');
+
+function frame(now) {
+  if (playing) {
+    t = (now - startAt) / 1000;
+    if (t >= DUR) {
+      t = DUR;
+      playing = false;
+      if (recorder && recorder.state === 'recording') setTimeout(() => recorder.stop(), 150);
+    }
+  }
+  update(t);
+  renderer.render(scene, camera);
+  compose(t);
+  requestAnimationFrame(frame);
+}
+function play() { t = 0; startAt = performance.now(); playing = true; }
+
+btnPlay.addEventListener('click', () => { if (!recorder) play(); });
+
+btnRec.addEventListener('click', () => {
+  if (recorder) return;
+  const types = ['video/mp4;codecs=avc1.42E01E', 'video/mp4', 'video/webm;codecs=vp9', 'video/webm'];
+  const type = types.find(x => window.MediaRecorder && MediaRecorder.isTypeSupported(x));
+  if (!type) { status.textContent = '이 브라우저는 영상 저장을 지원하지 않아요. 크롬에서 열어주세요.'; return; }
+  const chunks = [];
+  recorder = new MediaRecorder(out.captureStream(30), { mimeType: type, videoBitsPerSecond: 8_000_000 });
+  recorder.ondataavailable = e => e.data.size && chunks.push(e.data);
+  recorder.onstop = () => {
+    const blob = new Blob(chunks, { type });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `maumseorap-intro.${type.includes('mp4') ? 'mp4' : 'webm'}`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    recorder = null;
+    btnRec.disabled = btnPlay.disabled = false;
+    status.textContent = '저장했어요.';
+  };
+  btnRec.disabled = btnPlay.disabled = true;
+  status.textContent = `녹화 중이에요. ${DUR}초 동안 이 창을 그대로 두세요.`;
+  recorder.start(500);
+  play();
+});
+
+// ?t=12 처럼 붙이면 그 시점 장면에서 멈춰서 보여줌 (장면 확인용)
+const freeze = new URLSearchParams(location.search).get('t');
+Promise.all([document.fonts.load('56px Jua'), document.fonts.load('24px "Noto Sans KR"')]).finally(() => {
+  requestAnimationFrame(frame);
+  if (freeze !== null) t = Math.min(DUR, Math.max(0, Number(freeze) || 0));
+  else play();
+});
+</script>
+</body>
+</html>
