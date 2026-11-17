@@ -328,6 +328,37 @@
   .map-btn { position: absolute; right: 14px; top: 12px; z-index: 3; min-height: 40px; padding: 0 14px; border: 0; border-radius: 20px; cursor: pointer;
     background: rgba(255, 250, 242, .92); box-shadow: 0 3px 0 rgba(120, 78, 48, .14); font-family: var(--font-hand); font-size: 15px; color: var(--ink); }
   .map-btn[hidden] { display: none; }
+  .place-card { position: absolute; left: 12px; right: 12px; top: 62px; z-index: 3; padding: 14px 16px 12px; border-radius: 22px; background: rgba(255, 250, 242, .95);
+    box-shadow: 0 4px 0 rgba(120, 78, 48, .12), 0 12px 26px rgba(120, 78, 48, .18); animation: onbIn 360ms var(--ease-out); }
+  .place-card[hidden] { display: none; }
+  .place-card strong { font-family: var(--font-hand); font-weight: 400; font-size: 20px; }
+  .place-card p { margin: 4px 22px 10px 0; font-size: 13.5px; line-height: 1.6; color: var(--ink-2); word-break: keep-all; }
+  .pc-x { position: absolute; top: 6px; right: 8px; width: 36px; height: 36px; border: 0; background: none; cursor: pointer; font-size: 22px; color: var(--ink-3); }
+  .pc-acts { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pc-acts button { min-height: 38px; padding: 0 12px; border: 0; border-radius: 16px; cursor: pointer; background: var(--cream-2); box-shadow: 0 2px 0 rgba(120, 78, 48, .12);
+    font-family: var(--font-hand); font-size: 14.5px; color: var(--ink); white-space: nowrap; }
+  .fs-acts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+  .fs-acts button { min-height: 46px; border: 0; border-radius: 16px; cursor: pointer; background: var(--cream-2); box-shadow: 0 3px 0 rgba(120, 78, 48, .12); font-family: var(--font-hand); font-size: 15px; color: var(--ink); }
+  .fs-acts button.on { background: #e3efe3; color: var(--teal); }
+  .fs-acts button:disabled { opacity: .6; cursor: default; }
+  .badges { display: flex; gap: 6px; overflow-x: auto; margin: 8px -4px 2px; padding: 4px; scrollbar-width: none; }
+  .badges::-webkit-scrollbar { display: none; }
+  .badge-chip { flex: none; display: flex; flex-direction: column; align-items: center; gap: 1px; width: 70px; padding: 8px 4px 6px; border: 0; border-radius: 16px; cursor: pointer; background: #fff3d6; box-shadow: inset 0 0 0 2px #f7d77c;
+    font-family: var(--font-hand); font-size: 12px; color: var(--ink); }
+  .badge-chip .bi { font-size: 24px; line-height: 1.1; }
+  .badge-chip small { font-family: var(--font-body); font-size: 9.5px; color: var(--ink-2); text-align: center; line-height: 1.25; }
+  .badge-chip.locked { background: var(--cream-2); box-shadow: none; cursor: default; }
+  .badge-chip.locked .bi { filter: grayscale(1); opacity: .35; }
+  .badge-chip.worn { box-shadow: inset 0 0 0 3px var(--teal); }
+  .act-box { margin: 10px 0; padding: 14px; border-radius: 20px; background: var(--cream-2); }
+  .act-box strong { font-family: var(--font-hand); font-weight: 400; font-size: 17px; }
+  .act-box p { margin: 4px 0 10px; font-size: 13.5px; line-height: 1.6; color: var(--ink-2); }
+  .act-box button { min-height: 44px; padding: 0 18px; border: 0; border-radius: 16px; cursor: pointer; background: var(--teal); color: #fff; font-family: var(--font-hand); font-size: 15.5px; }
+  .act-box button:disabled { background: var(--cream); color: var(--ink-3); cursor: default; }
+  .bar { height: 10px; margin: 6px 0 10px; border-radius: 5px; background: rgba(120, 78, 48, .12); overflow: hidden; }
+  .bar i { display: block; height: 100%; border-radius: 5px; background: var(--teal); }
+  .seed-art { font-size: 44px; text-align: center; line-height: 1.2; }
+  .fruit-msg { margin-top: 10px; padding: 12px 14px; border-radius: 14px; background: #fff3d6; font-family: var(--font-hand); font-size: 16px; line-height: 1.5; }
   .express-btn { position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 3; min-height: 48px; padding: 0 20px; border: 0; border-radius: 24px; cursor: pointer;
     background: var(--coral); color: #fff; box-shadow: 0 5px 0 var(--coral-deep), 0 10px 20px rgba(160, 70, 40, .25); font-family: var(--font-hand); font-size: 17px; white-space: nowrap; }
   .express-btn[hidden] { display: none; }
@@ -431,6 +462,7 @@
   .onb-result span { font-size: 14.5px; line-height: 1.7; color: var(--ink-2); }
   .onb-note { margin: 14px 2px 0; font-size: 12.5px; line-height: 1.6; color: var(--ink-3); }
   .nick-row { display: flex; gap: 8px; }
+  .nick-row[hidden] { display: none; }
   .nick-input { flex: 1; min-width: 0; min-height: 54px; padding: 0 16px; border: 0; border-radius: 18px; background: var(--cream); box-shadow: inset 0 2px 0 rgba(120, 78, 48, .1);
     font-family: var(--font-hand); font-size: 20px; color: var(--ink); }
   .nick-input:focus { outline: 3px solid rgba(79, 138, 120, .4); }
@@ -508,6 +540,12 @@
       <div class="joy" id="joy" hidden aria-hidden="true"><div class="joy-knob" id="joyKnob"></div></div>
       <button class="map-btn" type="button" id="btnMap" hidden>🗺️ 전체 지도</button>
       <button class="express-btn" type="button" id="btnExpress" hidden><span id="expressLabel">여기에 내 마음 남기기</span></button>
+      <div class="place-card" id="placeCard" hidden role="status">
+        <button class="pc-x" type="button" id="pcClose" aria-label="안내 닫기">×</button>
+        <strong id="pcTitle"></strong>
+        <p id="pcDesc"></p>
+        <div class="pc-acts" id="pcActs"></div>
+      </div>
       <div class="stage-actions" id="stageActions">
         <button class="act" type="button" id="btnVillage">🏝️ 마음 마을</button>
         <button class="act" type="button" id="btnDecorate">🛋️ 꾸미기</button>
@@ -555,6 +593,7 @@
       <div class="vchips" id="villageChips" role="tablist" aria-label="마을 고르기"></div>
       <p class="vcount" id="villageCount"></p>
       <div class="friend-list" id="friendList"></div>
+      <div class="nick-row" id="friendCodeRow" style="margin-top:8px"><input class="nick-input" id="friendCode" maxlength="12" placeholder="친구 초대 코드" aria-label="친구 초대 코드" style="min-height:46px;font-size:16px"><button class="dice" type="button" id="btnFriendCode" aria-label="초대 코드로 친구 추가" style="min-height:46px">＋</button></div>
       <div class="vcare" id="villageCare" hidden></div>
       <button class="tree-row farm-row" type="button" id="btnFarm"><span>🌱</span>마음 텃밭에서 카드 캐기 · 낚기<em class="dot" id="farmDot" hidden></em></button>
       <button class="tree-row" type="button" id="btnTree"><span>🌳</span>마을의 마음 나무 보러가기</button>
@@ -568,6 +607,12 @@
       <div class="farm-acts">
         <button class="farm-btn" type="button" id="btnDig"><span class="fb-emoji">🌱</span><strong>밭에서 캐기</strong><small id="digSub"></small></button>
         <button class="farm-btn" type="button" id="btnFish"><span class="fb-emoji">🎣</span><strong id="fishLabel">연못에서 낚기</strong><small id="fishSub"></small></button>
+      </div>
+      <div class="act-box" style="margin-top:0">
+        <strong>🌼 씨앗 키우기</strong>
+        <div class="seed-art" id="seedArt"></div>
+        <p id="seedText"></p>
+        <button type="button" id="btnSeed"></button>
       </div>
       <button class="tree-row" type="button" id="btnMyCards"><span>📚</span>지난 마음카드 보기</button>
       <div style="height:12px"></div>
@@ -663,6 +708,10 @@
   <div class="field">마음 전하기 <span>(하루에 한 번)</span></div>
   <div class="cheers" id="fsCheers"></div>
   <div class="fs-done" id="fsDone" hidden></div>
+  <div class="fs-acts">
+    <button type="button" id="fsFriend"></button>
+    <button type="button" id="fsInvite">🏠 내 방에 초대하기</button>
+  </div>
   <div class="sheet-actions">
     <button class="pill pill-cream" type="button" data-close>마을로 돌아가기</button>
   </div>
@@ -707,6 +756,28 @@
   <div class="sheet-actions"><button class="pill pill-coral" type="button" id="btnExSend">여기에 남기기</button></div>
 </div>
 
+<div class="sheet" id="sheetTree" role="dialog" aria-modal="true" aria-labelledby="trTitle">
+  <div class="grip"></div>
+  <h3 id="trTitle">🌳 마음 나무</h3>
+  <p class="sub">모두의 마음이 모여 자라는 나무예요. 하루에 한 번씩 돌볼 수 있어요.</p>
+  <div class="act-box">
+    <strong>💧 함께 물 주기</strong>
+    <p id="trWaterText"></p>
+    <div class="bar"><i id="trBar"></i></div>
+    <button type="button" id="btnWater">물 주기</button>
+  </div>
+  <div class="act-box">
+    <strong>🍎 응원 열매 따기</strong>
+    <p>다른 친구들이 나무에 걸어둔 응원이 열매로 열려요. 하루에 하나 딸 수 있어요.</p>
+    <button type="button" id="btnFruit">열매 따기</button>
+    <div class="fruit-msg" id="trFruit" hidden></div>
+  </div>
+  <div class="sheet-actions">
+    <a class="pill pill-cream" href="maum-tree.html" style="display:grid;place-items:center;text-decoration:none;color:inherit">나무 자세히 보기</a>
+    <button class="pill pill-cream" type="button" data-close>닫기</button>
+  </div>
+</div>
+
 <div class="sheet" id="sheetConnect" role="dialog" aria-modal="true" aria-labelledby="cnTitle">
   <div class="grip"></div>
   <h3 id="cnTitle">마음연결</h3>
@@ -721,6 +792,7 @@
   <div class="grip"></div>
   <h3 id="stTitle">🌱 오늘의 작은 한 걸음</h3>
   <p class="sub" id="stSub">하나만 골라도 충분해요. 못 해도 괜찮아요.</p>
+  <div class="badges" id="stBadges" aria-label="걸음 배지"></div>
   <div class="vchips" id="stChips" role="tablist" aria-label="걸음 종류"></div>
   <div class="cards-list" id="stList"></div>
   <div class="sheet-actions"><button class="pill pill-cream" type="button" data-close>닫기</button></div>
@@ -995,7 +1067,26 @@ function fillPool(v) {
   });
 }
 const VILLAGERS = [...FRIENDS, ...POOL, TREE, FARM];
-const isActive = f => f === TREE || f === FARM || FRIENDS.includes(f);
+// 지도 가운데 방 자리 3곳에는 내가 추가한 친구의 방만 나타남
+const FRIENDS_KEY = 'mdr_friends';   // [{ id, name, icon, w, line, color, hat, acc }]
+const myFriends = () => { try { return JSON.parse(localStorage.getItem(FRIENDS_KEY) || '[]'); } catch (e) { return []; } };
+function saveFriends(list) { try { localStorage.setItem(FRIENDS_KEY, JSON.stringify(list)); } catch (e) {} applyFriends(); }
+function applyFriends() {
+  const list = myFriends();
+  POOL.forEach((r, i) => {
+    const fr = list[i];
+    r.friend = fr || null;
+    if (!fr) return;
+    Object.assign(r, { id: 'fr-' + fr.id, name: fr.name, icon: fr.icon, weather: WEATHERS[fr.w] ? WEATHERS[fr.w].name : '맑음', line: fr.line });
+    r.island.body.material.color.setHex(fr.color);
+    r.weather3d.setKind(fr.w);
+    dressMascot(r.island, { hat: fr.hat || 'none', acc: fr.acc || 'none' });
+    r.tag.textContent = `${fr.icon} ${fr.name}`;
+    r.tag.setAttribute('aria-label', `${fr.name}의 방에 놀러가기`);
+  });
+}
+applyFriends();
+const isActive = f => f === TREE || f === FARM || (POOL.includes(f) && !!f.friend);
 const activeVillagers = () => VILLAGERS.filter(isActive);
 
 // ===== 마음 대륙: 마을에 가면 아래에서 큰 땅이 올라오고, 섬들이 그 자리에 끼워져 하나로 이어짐 =====
@@ -1120,18 +1211,35 @@ EMOTION_VILLAGES.filter(v => DISTRICTS[v.key]).forEach((v, vi) => {
   v.residents.forEach(([nick, line], i) => {
     const a = i / 3 * Math.PI * 2 + vi;
     const m = createMascot([0xffdccf, 0xd2ecdc, 0xd5e5f7, 0xfbecb2, 0xe4d9f3][(vi + i) % 5]);
-    dressMascot(m, { hat: MASCOT_HATS[(i * 3 + vi + 1) % MASCOT_HATS.length].key, acc: MASCOT_ACCS[(i + vi) % MASCOT_ACCS.length].key });
+    const style = { hat: MASCOT_HATS[(i * 3 + vi + 1) % MASCOT_HATS.length].key, acc: MASCOT_ACCS[(i + vi) % MASCOT_ACCS.length].key };
+    dressMascot(m, style);
     m.M.scale.setScalar(1.5);
     m.M.position.set(d.x + Math.cos(a) * 3.2, 0, d.z + Math.sin(a) * 3.2);
     m.M.rotation.y = Math.atan2(d.x - m.M.position.x, d.z - m.M.position.z) + 0.6;
     m.M.traverse(o => { if (o.isMesh) o.castShadow = true; });
     continent.add(m.M);
     const r = { id: `${v.key}-${i}`, npc: true, district: v.key, name: nick, icon: v.icon, weather: WEATHERS[v.weather].name, line,
-      island: { root: m.M, M: m.M }, rot: m.M.rotation.y, home: m.M.position, hop: -10, mascot: m };
+      island: { root: m.M, M: m.M }, rot: m.M.rotation.y, home: m.M.position, hop: -10, mascot: m, style };
     r.tag = makeTag(`${v.icon} ${nick}`, `${nick}에게 가기`, () => goTo(r));
     r.tag.classList.add('npc-tag');
     RESIDENTS.push(r);
   });
+});
+// 빈 친구 자리 팻말
+const plotSigns = POOL.map((r, i) => {
+  const g = new THREE.Group();
+  const post = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.07, 1.5, 8), new THREE.MeshStandardMaterial({ color: 0x8b5e3c }));
+  post.position.y = 0.75; g.add(post);
+  const board = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.8, 0.1), new THREE.MeshStandardMaterial({ color: 0xf3e7d3 }));
+  board.position.y = 1.7; g.add(board);
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(3.4, 0.07, 6, 48), new THREE.MeshStandardMaterial({ color: 0xe8dcc6 }));
+  ring.rotation.x = Math.PI / 2; ring.position.y = 0.02; g.add(ring);
+  g.position.copy(r.home); g.position.y = 0;
+  g.traverse(o => { if (o.isMesh) o.castShadow = true; });
+  continent.add(g);
+  const tag = makeTag('＋ 친구 자리', '친구를 추가하면 친구 방이 생기는 자리', () => openFriendAdd());
+  tag.classList.add('npc-tag');
+  return { g, tag };
 });
 // 내가 남긴 마음 깃발 (오늘 것만, 동네마다 하나)
 const POSTS_KEY = 'mdr_posts';
@@ -1201,7 +1309,7 @@ function goHome() {
 }
 const meTag = makeTag('', '나', () => {});
 meTag.classList.add('me-tag');
-function refreshMeTag() { meTag.textContent = myNick() || '나'; }
+function refreshMeTag() { const b = wornBadge(); meTag.textContent = (b ? b.icon + ' ' : '') + (myNick() || '나'); }
 setTimeout(refreshMeTag, 0);
 const WEATHER_WORDS = { sunny: ['joy', 'calm'], cloudy: ['tired'], rain: ['sad'], storm: ['anx', 'angry'] };
 let exPick = null;
@@ -1369,7 +1477,7 @@ function goTo(f) {
   if (dir.lengthSq() < 0.01) dir.set(0, 0, 1);
   dir.normalize();
   walkToWorld(new THREE.Vector3(c.x + dir.x * ISLAND_R(f), 0, c.z + dir.z * ISLAND_R(f)), act);
-  function act() { if (f === TREE) location.href = 'maum-tree.html'; else if (f === FARM) openFarm(); else visitFriend(f); }
+  function act() { if (f === TREE) openTree(); else if (f === FARM) openFarm(); else visitFriend(f); }
 }
 
 // 오늘 넣은 쪽지의 첫 감정으로 "내 마음이 있는 마을"을 정함
@@ -1398,7 +1506,35 @@ function switchVillage(key) {
   currentVillage = key;
   villageArrived(key);
 }
+// 장소 안내: 그 동네가 어떤 곳이고 무엇을 할 수 있는지
+const PLACE_INFO = {
+  friends: { title: '🏡 마음 마을', desc: '가운데엔 내가 추가한 친구의 방이, 네 귀퉁이엔 날씨 마을이 있어요. 돌길을 따라 걸어가 봐요.', group: null },
+  sunny:  { title: '☀️ 맑음 마을', desc: '기쁘고 편안한 마음이 모이는 곳이에요. 오늘 좋았던 일을 나누면 다른 친구에게도 힘이 돼요.', group: 'link' },
+  cloudy: { title: '☁️ 흐림 마을', desc: '지치고 무기력한 마음이 쉬어 가는 곳이에요. 아무것도 안 해도 괜찮아요.', group: 'wake' },
+  rain:   { title: '🌧️ 비 마을', desc: '서운하고 슬프고 외로운 마음이 머무는 곳이에요. 여기선 혼자가 아니에요.', group: 'rest' },
+  storm:  { title: '⛈️ 번개 마을', desc: '불안하고 화나는 마음을 꺼내놓는 곳이에요. 꺼내놓으면 조금 가벼워져요.', group: 'rest' }
+};
+function showPlaceCard(key) {
+  const info = PLACE_INFO[key];
+  $('pcTitle').textContent = info.title;
+  $('pcDesc').textContent = info.desc;
+  const acts = $('pcActs'); acts.textContent = '';
+  const add = (label, fn) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = label; b.addEventListener('click', fn); acts.appendChild(b); };
+  if (key === 'friends') {
+    add('🗺️ 전체 지도', () => { setOverview(true); $('placeCard').hidden = true; });
+    add('🌳 마음 나무', () => { $('placeCard').hidden = true; goTo(TREE); });
+    add('🌱 마음 텃밭', () => { $('placeCard').hidden = true; goTo(FARM); });
+    add('＋ 친구 추가', () => { $('placeCard').hidden = true; openFriendAdd(); });
+  } else {
+    add('🚩 내 마음 남기기', () => { $('placeCard').hidden = true; openExpress(); });
+    add('🤗 주민 응원하기', () => { $('placeCard').hidden = true; const p = $('villagePanel'); if (p.classList.contains('collapsed')) p.querySelector('[data-collapse]').click(); toast('주민을 누르면 걸어가서 응원할 수 있어요'); });
+    add('🌱 작은 걸음', () => { $('placeCard').hidden = true; stepGroup = info.group; openSteps(); });
+  }
+  $('placeCard').hidden = false;
+}
+$('pcClose').addEventListener('click', () => { $('placeCard').hidden = true; });
 function villageArrived(key) {
+  showPlaceCard(key);
   const v = EMOTION_VILLAGES.find(x => x.key === key);
   const [a, b] = key === 'friends' ? GREETS.village : [`${v.icon} ${v.name} 마을`, '같은 날씨 친구들이 모여요.'];
   $('greetText').textContent = '';
@@ -1443,6 +1579,7 @@ function frame(now) {
   else if (today) setEyes('happy');
   else setEyes(t % 3.4 < 0.12 ? 'sleepy' : 'open');
   world.lampLight.intensity = 7 + Math.sin(t * 9) * 0.25;
+  if (guest) { const gh = clamp((t - (guest.hopAt || -10)) / 0.55); guest.M.position.y = 0.06 + Math.sin(gh * Math.PI) * 0.35 + Math.sin(t * 2.4) * 0.01; guest.setEyes(gh > 0 && gh < 1 ? 'happy' : (t + 1.3) % 3.1 < 0.12 ? 'sleepy' : 'open'); }
 
   // 새로 놓은 소품은 퐁 하고 커지며 나타남
   decorGroup.children.forEach(g => {
@@ -1509,6 +1646,7 @@ function frame(now) {
     };
     Object.values(DISTRICTS).forEach(d => place(d.tag, { x: d.x, y: 0, z: d.z }, overview ? 8 : 6.5, 34));
     RESIDENTS.forEach(r => place(r.tag, r.home, 2.4, 13));
+    plotSigns.forEach((p, i) => { const empty = !POOL[i].friend; p.g.visible = empty; if (empty) place(p.tag, p.g.position, 2.9, 16); else p.tag.classList.remove('show'); });
     Object.entries(flags).forEach(([k, fl]) => place(fl.tag, fl.g.position, 3.1, 16));
     place(meTag, _mw, overview ? 0 : 2.1, 99);
     // 지금 서 있는 동네가 바뀌면 패널 · 인사 · 마음 남기기 버튼 갱신
@@ -1642,7 +1780,7 @@ function resetHome() {
 let visiting = null;
 const GREETS = {
   decorate: ['내 방 꾸미기', '소품을 고르고 방바닥이나 마당을 눌러요.'],
-  village: ['마음 마을', '친구 섬에 놀러가 볼까요?'],
+  village: ['마음 마을', '걸어다니며 둘러봐요.'],
   visit: ['마음 마을', '친구에게 마음을 전해보세요.'],
   farm: ['마음 텃밭', '오늘의 마음카드를 캐거나 낚아볼까요?']
 };
@@ -1668,6 +1806,7 @@ function setMode(next, instant) {
   renderer.domElement.style.touchAction = next === 'decorate' ? 'none' : '';
   $('farmPanel').hidden = next !== 'farm';
   $('joy').hidden = next !== 'village';
+  if (next !== 'village') $('placeCard').hidden = true;
   $('btnMap').hidden = next !== 'village';
   if (next === 'village' && mode !== 'village') { overview = false; $('btnMap').textContent = '🗺️ 전체 지도'; }
   joyVec.x = joyVec.y = 0;
@@ -1743,6 +1882,7 @@ renderer.domElement.addEventListener('pointerup', e => {
   if (!downAt || Math.hypot(e.clientX - downAt.x, e.clientY - downAt.y) > 8) return;
   pointToRay(e);
   if (mode === 'home') {
+    if (guest && ray.intersectObject(guest.M, true).length) { guest.hopAt = performance.now() / 1000; toast(`${guest.M.userData.guestName}이(가) 놀러 왔어요. 반가워해요!`); return; }
     const hit = ray.intersectObjects([...drawers.map(d => d.g), M], true)[0];
     if (!hit) return;
     const o = ownerOf(hit.object, x => x.userData.drawerKey || x === M);
@@ -1990,13 +2130,20 @@ function renderVillagePanel() {
   $('villageTitle').textContent = `${v.icon} ${isFriends ? '마음 마을' : v.name + ' 마을'}`;
   const count = $('villageCount');
   count.textContent = '';
-  if (isFriends) count.textContent = '초대 코드로 연결한 이웃이에요.';
+  if (isFriends) count.textContent = `내가 추가한 친구 ${myFriends().length}/3 · 친구 방만 지도 가운데에 나타나요.`;
   else { const st = document.createElement('strong'); st.textContent = `${v.count}명`; count.append(`지금 '${v.name}' 마을에 `, st, '이 머물고 있어요. 혼자가 아니에요.'); }
 
   const list = $('friendList');
   list.textContent = '';
   const sent = cheersSent();
-  const people = isFriends ? FRIENDS : RESIDENTS.filter(r => r.district === currentVillage);
+  const people = isFriends ? POOL.filter(r => r.friend) : RESIDENTS.filter(r => r.district === currentVillage);
+  $('friendCodeRow').hidden = !isFriends;
+  if (isFriends && !people.length) {
+    const em = document.createElement('p');
+    em.className = 'mode-note';
+    em.textContent = '아직 친구가 없어요. 날씨 마을에서 만난 친구를 누르고 "친구 추가"를 하거나, 아래에 초대 코드를 넣어요.';
+    list.appendChild(em);
+  }
   people.forEach(f => {
     const b = document.createElement('button');
     b.type = 'button';
@@ -2021,12 +2168,12 @@ function renderVillagePanel() {
     care.append(document.createElement('br'), go);
   }
   $('villageNote').textContent = isFriends
-    ? '예시 이웃이에요. 실제로는 초대 코드로 연결한 친구나 센터 프로그램 그룹만 이웃이 돼요. 일기 내용은 절대 보이지 않아요.'
+    ? '친구 방에선 친구가 공개한 것만 보여요. 일기 내용은 절대 보이지 않아요. (프로토타입: 초대 코드는 아무 글자나 넣으면 예시 친구가 추가돼요)'
     : '날씨 마을에선 익명 별명과 고른 말만 보여요. 응원도 정해진 말로만 보낼 수 있어요. 가운데 버튼으로 내 마음을 남겨봐요. (주민은 예시)';
 }
-$('btnVillage').addEventListener('click', () => { camYaw = 0; setMode('village'); });
+$('btnVillage').addEventListener('click', () => { camYaw = 0; currentVillage = 'friends'; setMode('village'); showPlaceCard('friends'); });
 $('btnHome').addEventListener('click', () => setMode('home'));
-$('btnTree').addEventListener('click', () => { location.href = 'maum-tree.html'; });
+$('btnTree').addEventListener('click', () => goTo(TREE));
 
 // ===== 마음 텃밭: 하루에 한 번씩 캐기 · 낚기로 마음카드 얻기 =====
 const FARM_KEY = 'mdr_farm';    // { dig: 'YYYY-MM-DD', fish: 'YYYY-MM-DD' }
@@ -2036,6 +2183,7 @@ const myCards = () => { try { return JSON.parse(localStorage.getItem(CARDS_KEY) 
 let fishing = 'idle'; // idle | wait | bite
 function openFarm() { if (mode !== 'farm') setMode('farm'); }
 function renderFarmPanel() {
+  renderSeed();
   const st = farmState(), day = todayKey(), cards = myCards();
   $('farmCount').textContent = `모은 카드 ${new Set(cards.map(c => c.id)).size}/${MAUM_CARDS.length}`;
   // 하루에 한 장: 캐기든 낚기든 하나를 하면 오늘은 끝
@@ -2141,6 +2289,47 @@ function pickRung(r) {
 const STEPS_KEY = 'mdr_steps';   // [{ id, ts }]
 const stepsDone = () => readJSON(STEPS_KEY, []);
 let stepGroup = null;
+// 걸음 배지: 걸은 만큼 모이고, 하나를 골라 별명 옆에 달 수 있어요
+const BADGES = [
+  { key: 'first',  icon: '👣', name: '첫 걸음', how: '걸음 1번', ok: d => d.n >= 1 },
+  { key: 'three',  icon: '🥾', name: '세 걸음', how: '걸음 3번', ok: d => d.n >= 3 },
+  { key: 'ten',    icon: '🎒', name: '열 걸음', how: '걸음 10번', ok: d => d.n >= 10 },
+  { key: 'thirty', icon: '🏔️', name: '서른 걸음', how: '걸음 30번', ok: d => d.n >= 30 },
+  { key: 'out',    icon: '🚪', name: '문 밖 한 걸음', how: '나가봐요 1번', ok: d => d.groups.has('out') },
+  { key: 'days3',  icon: '📅', name: '사흘 걸음', how: '사흘 걸은 날', ok: d => d.days >= 3 },
+  { key: 'all5',   icon: '🌈', name: '다섯 길', how: '다섯 묶음 모두', ok: d => d.groups.size >= 5 },
+  { key: 'days7',  icon: '⭐', name: '이레 걸음', how: '이레 걸은 날', ok: d => d.days >= 7 }
+];
+const BADGE_ON_KEY = 'mdr_badge_on';
+function badgeData() {
+  const all = stepsDone();
+  const groups = new Set(all.map(x => (STEPS.find(st => st.id === x.id) || {}).group).filter(Boolean));
+  if (connectLog().some(x => x.kind === 'cheer' || x.kind === 'post' || x.kind === 'note')) groups.add('link');
+  if (notes.length) groups.add('grow');
+  return { n: all.length, groups, days: new Set(all.map(x => new Date(x.ts).toDateString())).size };
+}
+const earnedBadges = () => { const d = badgeData(); return BADGES.filter(b => b.ok(d)); };
+function wornBadge() { let k = ''; try { k = localStorage.getItem(BADGE_ON_KEY) || ''; } catch (e) {} return earnedBadges().find(b => b.key === k) || null; }
+function renderBadges() {
+  const box = $('stBadges'); box.textContent = '';
+  const d = badgeData(), worn = wornBadge();
+  BADGES.forEach(b => {
+    const got = b.ok(d);
+    const c = document.createElement('button');
+    c.type = 'button';
+    c.className = 'badge-chip' + (got ? '' : ' locked') + (worn && worn.key === b.key ? ' worn' : '');
+    c.disabled = !got;
+    const i = document.createElement('span'); i.className = 'bi'; i.textContent = b.icon;
+    const sm = document.createElement('small'); sm.textContent = got ? (worn && worn.key === b.key ? '달고 있어요' : '눌러서 달기') : b.how;
+    c.append(i, b.name, sm);
+    c.setAttribute('aria-label', `${b.name} 배지${got ? '' : ', 아직 잠겨 있어요: ' + b.how}`);
+    c.addEventListener('click', () => {
+      try { localStorage.setItem(BADGE_ON_KEY, worn && worn.key === b.key ? '' : b.key); } catch (e) {}
+      renderBadges(); refreshMeTag(); if (mode === 'home') renderHome();
+    });
+    box.appendChild(c);
+  });
+}
 function openSteps() {
   // 오늘 마음 날씨에 맞춰 시작 묶음을 제안 (비 · 번개엔 쉬어가요, 흐림엔 일어나요, 맑음엔 연결해요)
   const wk = todayWeather();
@@ -2152,6 +2341,7 @@ function renderSteps() {
   const s0 = new Date(); s0.setHours(0, 0, 0, 0);
   const today = new Set(stepsDone().filter(x => x.ts >= s0.getTime()).map(x => x.id));
   $('stSub').textContent = today.size ? `오늘 ${today.size}걸음 걸었어요. 여기까지만 해도 충분해요.` : '하나만 골라도 충분해요. 못 해도 괜찮아요.';
+  renderBadges();
   const chips = $('stChips'); chips.textContent = '';
   STEP_GROUPS.forEach(g => {
     const c = document.createElement('button');
@@ -2175,8 +2365,11 @@ function renderSteps() {
     b.addEventListener('click', () => {
       if (x.go === 'village') { sheetClose(); setTimeout(() => { camYaw = 0; setMode('village'); }, 300); return; }
       if (x.go === 'diary') { sheetClose(); setTimeout(() => openDrawer('diary'), 300); return; }
+      const before = new Set(earnedBadges().map(b => b.key));
       const all = stepsDone(); all.push({ id: x.id, ts: Date.now() });
       try { localStorage.setItem(STEPS_KEY, JSON.stringify(all)); } catch (e) {}
+      const fresh = earnedBadges().filter(b => !before.has(b.key));
+      if (fresh.length) setTimeout(() => toast(`${fresh[0].icon} '${fresh[0].name}' 배지를 얻었어요`), 2200);
       logConnect('step', 1, x.id);
       hop = performance.now() / 1000;
       toast(`🌱 '${x.title}' 해냈어요`);
@@ -2201,6 +2394,70 @@ $('btnMtSend').addEventListener('click', () => {
 });
 $('btnHelp').addEventListener('click', () => { sheetClose(); setTimeout(() => sheetOpen($('sheetHelp')), 280); });
 $('hpNote').addEventListener('click', () => { sheetClose(); setTimeout(openMentor, 280); });
+
+// ===== 마음 나무 활동: 함께 물 주기 · 응원 열매 =====
+const TREE_KEY = 'mdr_tree';   // { waters: ['YYYY-MM-DD'], fruitDay, fruit }
+const FRUIT_MSGS = ['오늘 여기까지 온 것만으로도 잘했어요.', '천천히 가도 괜찮아요. 나도 그래요.', '누군가는 네가 있어서 다행이라고 생각해요.', '힘든 날엔 쉬어도 돼요. 나무도 겨울엔 쉬어요.',
+  '어제보다 조금 나아졌다면 그걸로 충분해요.', '네가 남긴 마음을 보고 나도 용기 냈어요.', '오늘 하루도 버텨줘서 고마워요.', '혼자라고 느낄 때 이 열매를 떠올려요.'];
+const treeState = () => Object.assign({ waters: [], fruitDay: '', fruit: '' }, readJSON(TREE_KEY, {}));
+function weekGoal() {
+  // 이번 주 함께 물 주기 (다른 사람들 몫은 예시 숫자)
+  const now = new Date(), dow = (now.getDay() + 6) % 7;
+  const mon = new Date(now); mon.setDate(now.getDate() - dow); mon.setHours(0, 0, 0, 0);
+  const mine = treeState().waters.filter(d => new Date(d + 'T00:00:00') >= mon).length;
+  return { total: Math.min(100, 22 + dow * 11 + mine), mine };
+}
+function renderTree() {
+  const st = treeState(), g = weekGoal(), today = st.waters.includes(todayKey());
+  $('trWaterText').textContent = `이번 주 함께 물 주기 ${g.total}/100 · 내가 준 물 ${g.mine}번. 100번이 모이면 마을 나무에 꽃이 더 피어요. (다른 사람 수는 예시)`;
+  $('trBar').style.width = g.total + '%';
+  $('btnWater').disabled = today;
+  $('btnWater').textContent = today ? '오늘은 물을 줬어요' : '물 주기';
+  const picked = st.fruitDay === todayKey();
+  $('btnFruit').disabled = picked;
+  $('btnFruit').textContent = picked ? '오늘의 열매를 땄어요' : '열매 따기';
+  $('trFruit').hidden = !picked;
+  if (picked) $('trFruit').textContent = '"' + st.fruit + '"';
+}
+function openTree() { renderTree(); sheetOpen($('sheetTree')); }
+$('btnWater').addEventListener('click', () => {
+  const st = treeState();
+  if (st.waters.includes(todayKey())) return;
+  st.waters.push(todayKey());
+  try { localStorage.setItem(TREE_KEY, JSON.stringify(st)); } catch (e) {}
+  villageTree.restart(); TREE.growStart = -1;
+  renderTree();
+  toast('💧 나무에 물을 줬어요. 잎이 다시 돋아나요');
+});
+$('btnFruit').addEventListener('click', () => {
+  const st = treeState();
+  if (st.fruitDay === todayKey()) return;
+  st.fruitDay = todayKey();
+  st.fruit = FRUIT_MSGS[Math.floor(Math.random() * FRUIT_MSGS.length)];
+  try { localStorage.setItem(TREE_KEY, JSON.stringify(st)); } catch (e) {}
+  renderTree();
+});
+// ===== 텃밭 씨앗 키우기: 심고 → 하루에 한 번 물 주기 3번 → 수확 =====
+const SEED_KEY = 'mdr_seed';   // { planted: bool, waters: ['YYYY-MM-DD'], harvested: n }
+const seedState = () => Object.assign({ planted: false, waters: [], harvested: 0 }, readJSON(SEED_KEY, {}));
+function renderSeed() {
+  const st = seedState(), n = st.waters.length, today = st.waters.includes(todayKey());
+  const art = !st.planted ? '🟫' : n >= 3 ? '🌼' : n === 2 ? '🌿' : n === 1 ? '🌱' : '🌰';
+  $('seedArt').textContent = art;
+  const b = $('btnSeed');
+  b.disabled = false;
+  if (!st.planted) { $('seedText').textContent = `빈 밭이에요. 씨앗을 심고 사흘 동안 물을 주면 꽃이 펴요.${st.harvested ? ' 지금까지 ' + st.harvested + '송이 피웠어요.' : ''}`; b.textContent = '씨앗 심기'; }
+  else if (n >= 3) { $('seedText').textContent = '꽃이 활짝 폈어요! 수확해서 모아봐요.'; b.textContent = '🌼 수확하기'; }
+  else { $('seedText').textContent = `물 ${n}/3번 · 하루에 한 번 줄 수 있어요.${today ? ' 내일 또 와요.' : ''}`; b.textContent = today ? '오늘은 물을 줬어요' : '💧 물 주기'; b.disabled = today; }
+}
+$('btnSeed').addEventListener('click', () => {
+  const st = seedState();
+  if (!st.planted) { st.planted = true; st.waters = []; toast('🌰 씨앗을 심었어요. 내일부터가 아니라 오늘도 물을 줄 수 있어요'); }
+  else if (st.waters.length >= 3) { st.planted = false; st.waters = []; st.harvested++; toast(`🌼 꽃을 수확했어요. 지금까지 ${st.harvested}송이`); }
+  else if (!st.waters.includes(todayKey())) { st.waters.push(todayKey()); toast('💧 물을 줬어요. 조금 자랐어요'); }
+  try { localStorage.setItem(SEED_KEY, JSON.stringify(st)); } catch (e) {}
+  renderSeed();
+});
 
 // 지난 마음카드 모음 (최신순) — 이 기기에만 저장돼요
 function openCards() {
@@ -2303,8 +2560,101 @@ function openFriendSheet(f) {
   });
   $('fsDone').hidden = !done;
   if (done) $('fsDone').textContent = '오늘은 이미 응원을 전했어요. 내일 또 놀러와요.';
+  sheetPerson = f;
+  renderFriendActs();
   sheetOpen($('sheetFriend'));
 }
+// 친구 추가 · 내 방 초대
+let sheetPerson = null;
+const personKey = f => String(f.id).replace(/^fr-/, '');
+function renderFriendActs() {
+  const f = sheetPerson; if (!f) return;
+  const isFr = myFriends().some(x => x.id === personKey(f));
+  $('fsFriend').textContent = isFr ? '✓ 친구예요 (끊기)' : '＋ 친구 추가';
+  $('fsFriend').classList.toggle('on', isFr);
+  const inv = readJSON(INVITES_KEY, []).some(x => x.id === personKey(f) && x.day === todayKey());
+  $('fsInvite').textContent = inv ? '🏠 오늘 초대했어요' : '🏠 내 방에 초대하기';
+  $('fsInvite').disabled = inv;
+}
+function personData(f) {
+  const fr = f.friend;
+  if (fr) return { ...fr };
+  const wKey = Object.keys(WEATHERS).find(k => WEATHERS[k].name === f.weather) || 'sunny';
+  return { id: personKey(f), name: f.name, icon: f.icon, w: wKey, line: f.line, color: f.mascot ? f.mascot.body.material.color.getHex() : 0xfffaf2, hat: (f.style || {}).hat || 'none', acc: (f.style || {}).acc || 'none' };
+}
+$('fsFriend').addEventListener('click', () => {
+  const f = sheetPerson; if (!f) return;
+  let list = myFriends();
+  const key = personKey(f);
+  if (list.some(x => x.id === key)) {
+    list = list.filter(x => x.id !== key);
+    saveFriends(list);
+    toast(`${f.name}와(과) 친구를 끊었어요`);
+    if (f.friend === null || POOL.includes(f)) { sheetClose(); renderVillagePanel(); return; }
+  } else {
+    if (list.length >= 3) { toast('친구 자리는 3곳이에요. 먼저 한 자리를 비워요'); return; }
+    list.push(personData(f));
+    saveFriends(list);
+    logConnect('friend', 2, key);
+    toast(`🏡 ${f.name}의 방이 마을 가운데에 생겼어요`);
+  }
+  renderFriendActs();
+  renderVillagePanel();
+});
+const INVITES_KEY = 'mdr_invites';   // [{ id, name, color, hat, acc, day }]
+$('fsInvite').addEventListener('click', () => {
+  const f = sheetPerson; if (!f) return;
+  const d = personData(f);
+  const all = readJSON(INVITES_KEY, []).filter(x => x.day === todayKey());
+  all.push({ id: d.id, name: d.name, color: d.color, hat: d.hat, acc: d.acc, day: todayKey() });
+  try { localStorage.setItem(INVITES_KEY, JSON.stringify(all)); } catch (e) {}
+  logConnect('invite', 2, d.id);
+  renderFriendActs();
+  showGuest();
+  toast(`💌 ${d.name}에게 초대장을 보냈어요. 내 방에 놀러 올 거예요`);
+});
+function openFriendAdd() {
+  if (currentVillage !== 'friends') { currentVillage = 'friends'; }
+  const p = $('villagePanel');
+  if (p.classList.contains('collapsed')) p.querySelector('[data-collapse]').click();
+  renderVillagePanel();
+  toast('날씨 마을에서 만난 친구를 추가하거나, 초대 코드를 넣어요');
+  $('friendCode').focus({ preventScroll: false });
+}
+$('btnFriendCode').addEventListener('click', () => {
+  const code = $('friendCode').value.trim();
+  if (code.length < 2) { toast('초대 코드를 넣어주세요'); return; }
+  const list = myFriends();
+  if (list.length >= 3) { toast('친구 자리는 3곳이에요. 먼저 한 자리를 비워요'); return; }
+  // 프로토타입: 실제 코드 확인 대신 예시 친구를 차례로 추가
+  const demo = FRIENDS.find(d => !list.some(x => x.id === d.id));
+  if (!demo) { toast('예시 친구를 모두 추가했어요'); return; }
+  const hats = { haneul: 'headphones', bom: 'ribbon', dotori: 'beanie' };
+  list.push({ id: demo.id, name: demo.name, icon: demo.icon, w: WEATHER_BY_NAME[demo.weather] || 'sunny', line: demo.line, color: demo.mascot, hat: hats[demo.id] || 'none', acc: 'none' });
+  saveFriends(list);
+  logConnect('friend', 2, demo.id);
+  $('friendCode').value = '';
+  renderVillagePanel();
+  toast(`🏡 ${demo.name}의 방이 마을 가운데에 생겼어요`);
+});
+// 초대한 친구가 내 방 마당에 놀러 옴 (오늘 초대한 마지막 친구)
+let guest = null;
+function showGuest() {
+  const inv = readJSON(INVITES_KEY, []).filter(x => x.day === todayKey()).pop();
+  if (guest) { world.root.remove(guest.M); guest = null; }
+  if (!inv) return;
+  guest = createMascot(inv.color);
+  dressMascot(guest, { hat: inv.hat, acc: inv.acc });
+  guest.M.scale.setScalar(1.25);
+  guest.M.position.set(2.0, 0.06, 2.2);
+  guest.M.rotation.y = -0.9;
+  guest.M.userData.guestName = inv.name;
+  guest.M.traverse(o => { if (o.isMesh) o.castShadow = true; });
+  guest.M.visible = roomShown;
+  world.root.add(guest.M);
+}
+setTimeout(showGuest, 0);
+
 $('fsReport').addEventListener('click', () => toast('프로토타입이에요. 실제로는 센터 담당자에게 바로 전달돼요'));
 
 // 받은 응원함 (예시)
@@ -2469,7 +2819,7 @@ function renderHome() {
   const wk = todayWeather();
   if (wk) $('greetDate').textContent += ` · 마음 날씨 ${WEATHERS[wk].icon} ${WEATHERS[wk].name}`;
   const nk = myNick();
-  const who = document.createElement('span'); who.className = 'greet-nick'; who.textContent = nk ? nk + '님,' : '';
+  const who = document.createElement('span'); who.className = 'greet-nick'; who.textContent = nk ? ((wornBadge() ? wornBadge().icon + ' ' : '') + nk + '님,') : '';
   $('greetText').innerHTML = wk ? '오늘의 쪽지가 서랍에 있어요.<br>다른 서랍도 열어볼까요?' : `${hello}<br>오늘 마음 날씨는 어때요?`;
   if (nk) $('greetText').prepend(who);
   const b = $('diaryBadge');
