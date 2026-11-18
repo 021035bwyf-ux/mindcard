@@ -447,6 +447,7 @@ const Hub = {
           <a class="cta-btn ${urgent ? 'cta-btn-primary' : ''}" href="${CENTER.kakaoUrl}" target="_blank" rel="noopener" data-cta="kakao">💬 카카오톡 '${CENTER.kakaoName}'에 문의 남기기</a>
           <a class="cta-btn" href="${CENTER.phoneHref}" data-cta="phone">📞 센터 전화 (${CENTER.phone})</a>
           <a class="cta-btn" href="${CENTER.helplineHref}" data-cta="helpline">☎️ 청소년전화 ${CENTER.helpline} (24시간)</a>
+          ${opts.hideChatLink ? '' : `<a class="cta-btn" href="${HUB_BASE}chat.html" data-cta="chat">🤖 궁금한 점은 마음이(자동 안내)에게 물어보기</a>`}
         </div>
         <p class="cta-note">${note}</p>
       </div>
