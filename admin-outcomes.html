@@ -3,53 +3,53 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>마음서랍 - 성과 현황</title>
+<title>마음서랍 - 사업 성과 현황</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #f6ecdd; --surface: #fffaf2; --ink: #3b2c22; --ink-2: #6a5646; --ink-3: #9a8571;
-    --teal: #2f7d66; --coral: #e57f62; --line: rgba(90, 55, 30, .12);
+    --teal: #2f7d66; --teal-soft: #86bba4; --line: rgba(90, 55, 30, .12);
     --font-hand: "Jua", "Noto Sans KR", sans-serif;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; overflow-x: clip; }
   body { font-family: "Noto Sans KR", sans-serif; color: var(--ink); background: var(--bg); }
   .wrap { max-width: 1080px; margin: 0 auto; padding: 24px 16px 60px; }
-  .demo { margin-bottom: 18px; padding: 10px 14px; border-radius: 12px; background: #fde4dc; color: #7a2e22; font-size: 13px; }
+  .demo { margin-bottom: 18px; padding: 10px 14px; border-radius: 12px; background: #fde4dc; color: #7a2e22; font-size: 13px; line-height: 1.6; }
   header.top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 10px; margin-bottom: 18px; }
-  header.top h1 { margin: 0; font-family: var(--font-hand); font-weight: 400; font-size: 30px; }
+  header.top h1 { margin: 0; font-family: var(--font-hand); font-weight: 400; font-size: 28px; line-height: 1.3; }
   header.top p { margin: 4px 0 0; font-size: 13.5px; color: var(--ink-2); }
   .period { font-size: 13px; color: var(--ink-2); padding: 8px 12px; border-radius: 10px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); }
 
-  .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }
+  .section-title { margin: 22px 2px 10px; font-size: 15px; font-weight: 700; }
+  .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .kpis.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .kpi { padding: 16px 18px; border-radius: 18px; background: var(--surface); box-shadow: 0 4px 0 rgba(120, 78, 48, .1); }
   .kpi .k { font-size: 13px; color: var(--ink-2); }
   .kpi .v { margin-top: 6px; font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; }
-  .kpi .s { margin-top: 4px; font-size: 12.5px; color: var(--ink-2); }
-  .kpi.main { grid-column: span 1; }
-  .goal-track { position: relative; height: 10px; margin-top: 10px; border-radius: 5px; background: rgba(90,55,30,.08); }
-  .goal-fill { height: 100%; border-radius: 3px 5px 5px 3px; background: var(--teal); }
-  .goal-pin { position: absolute; top: -4px; width: 2px; height: 18px; background: var(--ink); }
-  .goal-pin span { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 11px; font-weight: 700; color: var(--ink); }
-  .status { display: inline-flex; align-items: center; gap: 5px; margin-top: 22px; font-size: 12.5px; font-weight: 700; }
+  .kpi .v small { font-size: 15px; font-weight: 500; color: var(--ink-2); }
+  .kpi .s { margin-top: 6px; font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
+  .meter { height: 10px; margin-top: 10px; border-radius: 5px; background: rgba(90, 55, 30, .08); overflow: hidden; }
+  .meter i { display: block; height: 100%; border-radius: 5px; background: var(--teal); }
+  .status { margin-top: 8px; font-size: 12.5px; font-weight: 700; }
 
-  .grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 12px; }
+  .grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 12px; margin-top: 12px; }
   .panel { padding: 18px 18px 14px; border-radius: 18px; background: var(--surface); box-shadow: 0 4px 0 rgba(120, 78, 48, .1); }
   .panel h2 { margin: 0 0 4px; font-size: 16px; }
   .panel .desc { margin: 0 0 12px; font-size: 12.5px; color: var(--ink-2); line-height: 1.6; }
-  .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 4px; font-size: 12.5px; color: var(--ink-2); }
-  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+  .panel.wide { grid-column: 1 / -1; }
   details.table { margin-top: 10px; font-size: 13px; }
   details.table summary { cursor: pointer; color: var(--ink-2); font-weight: 500; }
-  .caveat { margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: rgba(90,55,30,.05); font-size: 12.5px; color: var(--ink-2); line-height: 1.6; }
-  .defs { margin-top: 12px; }
-  .defs dl { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 8px 14px; margin: 0; font-size: 13px; line-height: 1.6; }
+  .caveat { margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: rgba(90, 55, 30, .05); font-size: 12.5px; color: var(--ink-2); line-height: 1.6; }
+  .rule { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 12px; font-size: 13px; }
+  .rule select { min-height: 40px; padding: 0 10px; border: 0; border-radius: 10px; background: #fff; box-shadow: inset 0 0 0 1px var(--line); font: inherit; color: var(--ink); }
+  .defs dl { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 8px 14px; margin: 0; font-size: 13px; line-height: 1.6; }
   .defs dt { font-weight: 700; }
   .defs dd { margin: 0; color: var(--ink-2); }
 
   @media (max-width: 860px) {
-    .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .kpis, .kpis.three { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .grid { grid-template-columns: minmax(0, 1fr); }
     .defs dl { grid-template-columns: minmax(0, 1fr); }
   }
@@ -57,62 +57,73 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="demo">예시 데이터로 만든 화면이에요. 실제 운영에선 동의한 참여자의 외로움 점수(일기 내용 제외)만 모아서 계산하고, 관리자 로그인 뒤에만 보여요.</div>
+  <div class="demo">예시 데이터로 만든 화면이에요(2027년 8월 말 시점을 가정). 실제 운영에선 동의한 참여자의 익명 기록만 모아 계산하고, 관리자 로그인 뒤에만 보여요. 일기 내용은 포함되지 않아요.</div>
 
   <header class="top">
     <div>
-      <h1>마음서랍 성과 현황</h1>
-      <p>외로움 점수(0~30점)의 사전·사후 변화로 본 해소율</p>
+      <h1>청(소)년 외로움 마음돌봄 프로젝트<br>성과 현황</h1>
+      <p>2027년 사업 목표 대비 진행 상황</p>
     </div>
     <div class="period" id="period"></div>
   </header>
 
-  <section class="kpis" aria-label="핵심 지표">
-    <div class="kpi main">
-      <div class="k">해소율</div>
-      <div class="v" id="kRate"></div>
-      <div class="goal-track" aria-hidden="true"><div class="goal-fill" id="kRateFill"></div><div class="goal-pin" id="kRatePin"><span>목표 20%</span></div></div>
-      <div class="status" id="kStatus"></div>
-    </div>
-    <div class="kpi"><div class="k">사후 응답률</div><div class="v" id="kResp"></div><div class="s" id="kRespSub"></div></div>
-    <div class="kpi"><div class="k">평균 점수 변화</div><div class="v" id="kAvg"></div><div class="s">사전 대비 최근 측정 (낮을수록 덜 외로움)</div></div>
-    <div class="kpi"><div class="k">참여자</div><div class="v" id="kN"></div><div class="s" id="kNSub"></div></div>
-  </section>
+  <div class="section-title">마음연결 패스 (핵심 목표)</div>
+  <section class="kpis" aria-label="핵심 지표" id="coreKpis"></section>
+
+  <div class="section-title">기반 만들기</div>
+  <section class="kpis three" aria-label="기반 지표" id="baseKpis"></section>
 
   <div class="grid">
+    <section class="panel wide">
+      <h2>첫 연결로 세는 기준</h2>
+      <div class="rule">
+        <label for="minLevel">이 단계 이상을 스스로 해내면 "첫 연결"로 세요:</label>
+        <select id="minLevel"></select>
+      </div>
+      <p class="desc" style="margin:0">기준을 바꾸면 아래 숫자가 같이 바뀌어요. 센터에서 기준을 정하면 그 값으로 고정해 둘게요.</p>
+    </section>
+
     <section class="panel">
-      <h2>월별 해소율</h2>
-      <p class="desc">그 달 말까지 사후 측정을 마친 대상자 기준 누적 해소율이에요.</p>
-      <div id="trendChart"></div>
+      <h2>발견에서 연결까지</h2>
+      <p class="desc">자가점검으로 들어온 사람이 어디까지 이어졌는지 단계별 인원이에요.</p>
+      <div id="funnel"></div>
+      <details class="table"><summary>표로 보기</summary><div id="funnelTable"></div></details>
+    </section>
+
+    <section class="panel">
+      <h2>패스 참여자가 가장 멀리 가본 단계</h2>
+      <p class="desc">작은 것부터 스스로 고른 연결이 어디까지 갔는지예요.</p>
+      <div id="levels"></div>
+      <div class="caveat" id="levelNote"></div>
+      <details class="table"><summary>표로 보기</summary><div id="levelTable"></div></details>
+    </section>
+
+    <section class="panel">
+      <h2>월별 첫 연결 (누적)</h2>
+      <p class="desc">그 달 말까지 첫 연결을 해낸 패스 참여자 수예요.</p>
+      <div id="trend"></div>
       <details class="table"><summary>표로 보기</summary><div id="trendTable"></div></details>
     </section>
 
     <section class="panel">
-      <h2>사전 → 최근 구간 변화</h2>
-      <p class="desc">사후까지 응답한 대상자 <b id="shiftN"></b>명의 구간 분포예요.</p>
-      <div id="shiftBefore"></div>
-      <div id="shiftAfter"></div>
-      <div class="legend" id="bandLegend"></div>
-      <details class="table"><summary>표로 보기</summary><div id="shiftTable"></div></details>
+      <h2>외로움 점수 변화 (보조 지표)</h2>
+      <p class="desc">처음 점수가 높았던 사람 중 다시 쟀을 때 구간이 내려간 비율이에요.</p>
+      <div class="kpi" style="box-shadow:none;padding:0;background:none">
+        <div class="v" id="relief"></div>
+        <div class="s" id="reliefSub"></div>
+      </div>
+      <div class="caveat">사업의 주 목표는 연결이고, 점수 변화는 참고로만 봐요. 다시 재지 않은 사람은 빠지고, 처음 점수가 아주 높았던 사람은 자연스럽게 조금 낮아지는 경향도 있어요.</div>
     </section>
 
-    <section class="panel">
-      <h2>참여 정도별 해소율</h2>
-      <p class="desc">한 달 평균 기록(쪽지·마음체크) 횟수로 나눠 본 해소율이에요.</p>
-      <div id="groupChart"></div>
-      <div class="caveat">참여가 많은 사람의 해소율이 높게 나오지만, 이건 함께 나타나는 경향(상관관계)이에요. 앱 사용이 해소의 원인이라고 단정할 수는 없어요.</div>
-      <details class="table"><summary>표로 보기</summary><div id="groupTable"></div></details>
-    </section>
-
-    <section class="panel defs">
+    <section class="panel wide defs">
       <h2>지표 정의</h2>
       <dl>
-        <dt>측정 도구</dt><dd>마음체크의 외로움 검사(10문항, 0~30점). 정식 성과 보고에는 사업계획서의 LSIS 원척도로 바꿔 쓰는 걸 권장해요.</dd>
-        <dt>대상자</dt><dd>처음(사전) 점수가 8점 이상, 즉 "가끔 외로움" 이상인 참여자</dd>
-        <dt>측정 주기</dt><dd>시작할 때 한 번, 이후 4주마다</dd>
-        <dt>해소</dt><dd>가장 최근 측정의 구간이 사전보다 한 단계 이상 내려간 경우</dd>
-        <dt>해소율</dt><dd>해소된 사람 ÷ 사후 측정을 한 번 이상 마친 대상자</dd>
-        <dt>주의할 점</dt><dd>중간에 응답하지 않은 사람은 분모에서 빠지므로 응답률을 함께 보고해야 해요. 처음 점수가 매우 높았던 사람은 다음 측정에서 자연스럽게 조금 낮아지는 경향(평균 회귀)도 있어요.</dd>
+        <dt>자가점검 · 캠페인</dt><dd>앱 첫 화면의 마음체크를 끝낸 사람 + 캠페인 현장 참여자 (목표 300명)</dd>
+        <dt>마음연결 패스</dt><dd>면접으로 "나에게 중요한 것"을 묻고 사람 1명 · 공간 1곳 · 활동 1개를 함께 정한 참여자 (목표 40명)</dd>
+        <dt>첫 연결</dt><dd>패스 참여자가 위에서 정한 기준 단계 이상의 연결을 스스로 골라 한 번 해낸 것 (목표 28명, 패스의 70%)</dd>
+        <dt>8주 지속</dt><dd>패스 시작 뒤 8주 가운데 6주 이상 연결 활동이 있었던 것 (목표 20명, 패스의 50%). 아직 8주가 안 된 사람은 "진행 중"으로 따로 세요.</dd>
+        <dt>협력자원</dt><dd>실제로 첫 방문 동행이 가능하다고 확인된 지역 공간 · 기관 · 활동 (목표 30개소)</dd>
+        <dt>측정 도구</dt><dd>외로움 척도는 설정으로 바꿀 수 있어요. 척도가 바뀌면 점수 변화는 같은 척도로 잰 기록끼리만 비교해요.</dd>
       </dl>
     </section>
   </div>
@@ -120,40 +131,85 @@
 
 <style id="mcCss"></style>
 <script type="module">
-import { generateMockCohort, computeOutcomes, BANDS, TARGET_RATE } from './js/outcomes.js';
-import { lineChart, barList, stackedBar, dataTable, MINI_CHART_CSS } from './js/mini-charts.js';
+import { TARGETS, LEVELS, generateMockProject, computeKpis } from './js/project-kpi.js';
+import { generateMockCohort, computeOutcomes } from './js/outcomes.js';
+import { lineChart, barList, dataTable, MINI_CHART_CSS } from './js/mini-charts.js';
 
 document.getElementById('mcCss').textContent = MINI_CHART_CSS;
 const $ = id => document.getElementById(id);
-const pct = (v, d = 1) => (v * 100).toFixed(d) + '%';
+const pct = (v, d = 0) => (v * 100).toFixed(d) + '%';
+const TEAL = '#2f7d66', SOFT = '#86bba4';
 
-const people = generateMockCohort();
-const o = computeOutcomes(people);
+const project = generateMockProject();
+$('period').textContent = `사업 기간 2027.1 ~ 12 · ${project.asOf.getFullYear()}년 ${project.asOf.getMonth() + 1}월 ${project.asOf.getDate()}일 기준`;
 
-$('period').textContent = '기간 2026.06 ~ 2026.11 (11월 13일 기준)';
-$('kRate').textContent = pct(o.rate);
-$('kRateFill').style.width = Math.min(100, (o.rate / 0.3) * 100) + '%';
-$('kRatePin').style.left = (TARGET_RATE / 0.3) * 100 + '%';
-const gap = TARGET_RATE - o.rate;
-$('kStatus').textContent = gap > 0 ? `⏳ 목표까지 ${(gap * 100).toFixed(1)}%p` : '✅ 목표 달성';
-$('kResp').textContent = pct(o.responseRate, 0);
-$('kRespSub').textContent = `대상자 ${o.eligible}명 중 ${o.followed}명이 사후 측정 완료`;
-$('kAvg').textContent = (o.avgChange > 0 ? '+' : '') + o.avgChange.toFixed(1) + '점';
-$('kN').textContent = o.participants + '명';
-$('kNSub').textContent = `해소 ${o.resolved}명 · 대상자 ${o.eligible}명`;
+// 목표 대비 타일: 값 / 목표 + 진행 막대 + 상태 문구(아이콘과 글로 함께 표시)
+function tile(box, { name, value, target, sub }) {
+  const done = value >= target;
+  const el = document.createElement('div');
+  el.className = 'kpi';
+  const k = document.createElement('div'); k.className = 'k'; k.textContent = name;
+  const v = document.createElement('div'); v.className = 'v';
+  v.append(String(value), Object.assign(document.createElement('small'), { textContent: ` / ${target}` }));
+  const meter = document.createElement('div'); meter.className = 'meter';
+  meter.setAttribute('role', 'img');
+  meter.setAttribute('aria-label', `${name} 목표 ${target} 중 ${value}, ${pct(Math.min(1, value / target))}`);
+  const fill = document.createElement('i'); fill.style.width = Math.min(100, value / target * 100) + '%';
+  meter.appendChild(fill);
+  const st = document.createElement('div'); st.className = 'status';
+  st.textContent = done ? '✅ 목표 달성' : `⏳ 목표까지 ${target - value} 남음 (${pct(value / target)})`;
+  el.append(k, v, meter, st);
+  if (sub) { const s = document.createElement('div'); s.className = 's'; s.textContent = sub; el.appendChild(s); }
+  box.appendChild(el);
+}
 
-const trendPts = o.trend.filter(t => t.followed > 0).map(t => ({ label: t.label, value: t.rate, sub: `사후 측정 ${t.followed}명 중 ${t.resolved}명 해소` }));
-lineChart($('trendChart'), { points: trendPts, yMax: 0.3, yTicks: 3, target: TARGET_RATE, targetLabel: '목표 20%', fmt: v => Math.round(v * 100) + '%', ariaLabel: '월별 누적 해소율' });
-dataTable($('trendTable'), ['월', '해소율', '해소', '사후 측정'], o.trend.map(t => [t.label, pct(t.rate), t.resolved + '명', t.followed + '명']));
+const sel = $('minLevel');
+LEVELS.forEach(l => { const o = document.createElement('option'); o.value = l.level; o.textContent = `${l.name} 단계 이상 (${l.eg})`; sel.appendChild(o); });
+sel.value = '2';
+sel.addEventListener('change', render);
 
-$('shiftN').textContent = o.followed;
-stackedBar($('shiftBefore'), BANDS.map((b, i) => ({ label: b.name, value: o.before[i], color: b.color })), { title: '사전' });
-stackedBar($('shiftAfter'), BANDS.map((b, i) => ({ label: b.name, value: o.after[i], color: b.color })), { title: '최근' });
-$('bandLegend').innerHTML = BANDS.map((b, i) => `<span><i style="background:${b.color}"></i>${b.name} (${i ? BANDS[i - 1].max + 1 : 0}~${b.max}점)</span>`).join('');
-dataTable($('shiftTable'), ['구간', '사전', '최근'], BANDS.map((b, i) => [b.name, o.before[i] + '명', o.after[i] + '명']));
+const outcome = computeOutcomes(generateMockCohort());
+$('relief').textContent = pct(outcome.rate, 1);
+$('reliefSub').textContent = `다시 잰 대상자 ${outcome.followed}명 중 ${outcome.resolved}명 · 다시 잰 비율 ${pct(outcome.responseRate)}`;
 
-barList($('groupChart'), o.groups.map(g => ({ label: g.name, value: g.rate, valueText: pct(g.rate, 0), note: `${g.n}명 중 ${g.resolved}명 해소`, color: '#2f7d66' })), { max: 0.3 });
-dataTable($('groupTable'), ['참여 정도', '해소율', '해소', '대상'], o.groups.map(g => [g.name, pct(g.rate), g.resolved + '명', g.n + '명']));
+function render() {
+  const minLevel = +sel.value;
+  const k = computeKpis(project, minLevel);
+  const lvName = LEVELS.find(l => l.level === minLevel).name;
+
+  const core = $('coreKpis'); core.textContent = '';
+  tile(core, { name: '자가점검 · 캠페인 참여', value: project.selfCheck, target: TARGETS.selfCheck, sub: `이 중 외로움이 높게 나온 사람 ${project.selfCheckHigh}명` });
+  tile(core, { name: '마음연결 패스', value: k.pass, target: TARGETS.pass, sub: '면접을 거쳐 패스를 시작한 사람' });
+  tile(core, { name: '첫 연결', value: k.firstConnect, target: TARGETS.firstConnect, sub: `패스 참여자의 ${pct(k.firstRate)} · 기준 '${lvName}' 이상` });
+  tile(core, { name: '8주 지속 참여', value: k.sustain8, target: TARGETS.sustain8, sub: `8주가 지난 ${k.due8}명 중 · 아직 진행 중 ${k.pass - k.due8}명` });
+
+  const base = $('baseKpis'); base.textContent = '';
+  tile(base, { name: '마음연결 코디네이터', value: project.coordinators, target: TARGETS.coordinators });
+  tile(base, { name: '보호자 자조모임', value: project.guardians, target: TARGETS.guardians });
+  tile(base, { name: '지역 협력자원', value: project.resources, target: TARGETS.resources });
+
+  const steps = [
+    { label: '자가점검 참여', value: project.selfCheck },
+    { label: '외로움 높음', value: project.selfCheckHigh },
+    { label: '패스 시작', value: k.pass },
+    { label: '첫 연결', value: k.firstConnect },
+    { label: '8주 지속', value: k.sustain8 }
+  ];
+  barList($('funnel'), steps.map((s, i) => ({ label: s.label, value: s.value, valueText: s.value + '명', color: TEAL, note: i ? `앞 단계의 ${pct(s.value / (steps[i - 1].value || 1))}` : '' })), { max: project.selfCheck });
+  dataTable($('funnelTable'), ['단계', '인원', '앞 단계 대비'], steps.map((s, i) => [s.label, s.value + '명', i ? pct(s.value / (steps[i - 1].value || 1)) : '-']));
+
+  // 기준 이상인 단계는 진한 색, 아닌 단계는 연한 색 — 막대 옆 글에도 같이 적어 색에만 기대지 않음
+  const rows = [{ label: '아직 시작 전', value: k.notYet, valueText: k.notYet + '명', color: SOFT, note: '첫 연결로 세지 않음' }]
+    .concat(k.byLevel.map(l => ({ label: l.name, value: l.n, valueText: `${l.n}명${l.level >= minLevel ? ' ●' : ''}`, color: l.level >= minLevel ? TEAL : SOFT, note: `${l.eg} · ${l.level >= minLevel ? '첫 연결로 셈' : '첫 연결로 세지 않음'}` })));
+  barList($('levels'), rows, { max: Math.max(...rows.map(r => r.value), 1) });
+  $('levelNote').textContent = `● 표시와 진한 막대가 첫 연결로 세는 단계예요 ('${lvName}' 이상, 합계 ${k.firstConnect}명).`;
+  dataTable($('levelTable'), ['단계', '예', '인원', '첫 연결'], [['아직 시작 전', '-', k.notYet + '명', '아니오']].concat(k.byLevel.map(l => [l.name, l.eg, l.n + '명', l.level >= minLevel ? '예' : '아니오'])));
+
+  const pts = k.months.map(m => ({ label: m.label, value: m.firstConnect, sub: `패스 ${m.pass}명 중 첫 연결 ${m.firstConnect}명` }));
+  lineChart($('trend'), { points: pts, yMax: 40, yTicks: 4, target: TARGETS.firstConnect, targetLabel: `목표 ${TARGETS.firstConnect}명`, fmt: v => Math.round(v) + '명', ariaLabel: '월별 누적 첫 연결 인원' });
+  dataTable($('trendTable'), ['월', '패스 누적', '첫 연결 누적'], k.months.map(m => [m.label, m.pass + '명', m.firstConnect + '명']));
+}
+render();
 </script>
 </body>
 </html>
